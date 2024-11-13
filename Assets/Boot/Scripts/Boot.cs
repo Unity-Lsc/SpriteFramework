@@ -1,49 +1,70 @@
+using SpriteFramework;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using YooAsset;
 
 /// <summary>
-/// ÏîÄ¿Æô¶¯
+/// é¡¹ç›®å¯åŠ¨
 /// </summary>
-public class Boot : MonoBehaviour
+public class Boot : UnitySingleton<Boot>
 {
 
-    private void Awake() {
-        DontDestroyOnLoad(gameObject);
+    /// <summary>
+    /// èµ„æºç³»ç»Ÿè¿è¡Œæ¨¡å¼
+    /// </summary>
+    public EPlayMode PlayMode = EPlayMode.EditorSimulateMode;
+
+    public string RemoteURL = "http://127.0.0.1:6080";
+
+    public override void Awake() {
+        base.Awake();
+
+        Application.targetFrameRate = 60;
+        Application.runInBackground = true;
+
         StartCoroutine(BootStartUp());
     }
 
     /// <summary>
-    /// ÏîÄ¿Æô¶¯Èë¿Ú
+    /// é¡¹ç›®å¯åŠ¨å…¥å£
     /// </summary>
     IEnumerator BootStartUp() {
 
-        //¼ì²éÈÈ¸üĞÂ
+        //åˆå§‹åŒ–YooAsset
+        YooAssets.Initialize();
+        YooAssets.SetOperationSystemMaxTimeSlice(30);
+        //end
+
+        //æ£€æŸ¥çƒ­æ›´æ–°
         yield return CheckHotUpdate();
         //end
 
-        //¿ò¼Ü³õÊ¼»¯
+        //æ¡†æ¶åˆå§‹åŒ–
         yield return InitFramework();
         //end
 
-        //½øÈëÓÎÏ·
+        //è¿›å…¥æ¸¸æˆ
+        GameEntry.Instance.EnterGame();
         //end
 
         yield break;
     }
 
     /// <summary>
-    /// ¼ì²éÈÈ¸üĞÂ
+    /// æ£€æŸ¥çƒ­æ›´æ–°
     /// </summary>
     IEnumerator CheckHotUpdate() {
-        yield break;
+        YooAssetHotUpdate.Instance.Init(PlayMode, RemoteURL);
+        yield return YooAssetHotUpdate.Instance.GameHotUpdate();
     }
 
     /// <summary>
-    /// ¿ò¼Ü³õÊ¼»¯
+    /// æ¡†æ¶åˆå§‹åŒ–
     /// </summary>
-    /// <returns></returns>
     IEnumerator InitFramework() {
+        gameObject.AddComponent<ResMgr>().Init();
+        gameObject.AddComponent<SceneMgr>().Init();
+        gameObject.AddComponent<GameEntry>().Init();
         yield break;
     }
 
