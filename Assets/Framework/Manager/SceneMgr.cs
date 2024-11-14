@@ -1,4 +1,6 @@
-using UnityEngine.SceneManagement;
+using System.Collections;
+using UnityEngine;
+using YooAsset;
 
 namespace SpriteFramework
 {
@@ -13,11 +15,26 @@ namespace SpriteFramework
         }
 
         /// <summary>
-        /// 进入场景
+        /// 加载并进入场景
         /// </summary>
         /// <param name="sceneName">进入的场景名称</param>
-        public void EnterScene(string sceneName) {
-            SceneManager.LoadScene(sceneName);
+        public IEnumerator LoadScene(string sceneName) {
+            var handler = ResMgr.Instance.LoadSceneAsync(SFConstDefine.SceneRoot + sceneName);
+            
+            //加载中 显示进度
+            while (!handler.IsDone) {
+                float progress = handler.Progress;
+                Debug.Log($"Loading progress: {progress * 100}%");
+                yield return null;
+            }
+
+            //加载完毕
+            if(handler.Status == EOperationStatus.Succeed) {
+                Debug.LogFormat("Scene:{0} loaded successfully!", sceneName);
+            } else {
+                Debug.LogErrorFormat("Scene:{0} load failed!", sceneName);
+            }
+
         }
 
     }

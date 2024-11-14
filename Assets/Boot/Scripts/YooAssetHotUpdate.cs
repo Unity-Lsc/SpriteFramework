@@ -2,6 +2,7 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 using YooAsset;
+using SpriteFramework;
 
 /// <summary>
 /// 热更新管理器
@@ -56,7 +57,7 @@ public class YooAssetHotUpdate : Singleton<YooAssetHotUpdate>
         var playMode = mPlayMode;
 
         //创建默认的资源包
-        string packageName = "DefaultPackage";
+        string packageName = SFConstDefine.DefaultPackageName;
         var package = YooAssets.TryGetPackage(packageName);
         if(package == null) {
             package = YooAssets.CreatePackage(packageName);
@@ -66,15 +67,17 @@ public class YooAssetHotUpdate : Singleton<YooAssetHotUpdate>
         //编辑器下的模拟模式
         InitializationOperation initializationOperation = null;
         if (playMode == EPlayMode.EditorSimulateMode) {
-            var createParameters = new EditorSimulateModeParameters();
-            createParameters.SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(packageName);
+            var createParameters = new EditorSimulateModeParameters {
+                SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(packageName)
+            };
             initializationOperation = package.InitializeAsync(createParameters);
         }
 
         //单机运行模式
         if (playMode == EPlayMode.OfflinePlayMode) {
-            var createParameters = new OfflinePlayModeParameters();
-            createParameters.DecryptionServices = new GameDecryptionServices();
+            var createParameters = new OfflinePlayModeParameters {
+                DecryptionServices = new GameDecryptionServices()
+            };
             initializationOperation = package.InitializeAsync(createParameters);
         }
 
@@ -82,10 +85,11 @@ public class YooAssetHotUpdate : Singleton<YooAssetHotUpdate>
         if (playMode == EPlayMode.HostPlayMode) {
             string defaultHostServer = GetHostServerURL();
             string fallbackHostServer = GetHostServerURL();
-            var createParameters = new HostPlayModeParameters();
-            createParameters.DecryptionServices = new GameDecryptionServices();
-            createParameters.QueryServices = new GameQueryServices();
-            createParameters.RemoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
+            var createParameters = new HostPlayModeParameters {
+                DecryptionServices = new GameDecryptionServices(),
+                QueryServices = new GameQueryServices(),
+                RemoteServices = new RemoteServices(defaultHostServer, fallbackHostServer)
+            };
             initializationOperation = package.InitializeAsync(createParameters);
         }
 
@@ -93,10 +97,11 @@ public class YooAssetHotUpdate : Singleton<YooAssetHotUpdate>
         if (playMode == EPlayMode.WebPlayMode) {
             string defaultHostServer = GetHostServerURL();
             string fallbackHostServer = GetHostServerURL();
-            var createParameters = new WebPlayModeParameters();
-            createParameters.DecryptionServices = new GameDecryptionServices();
-            createParameters.QueryServices = new GameQueryServices();
-            createParameters.RemoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
+            var createParameters = new WebPlayModeParameters {
+                DecryptionServices = new GameDecryptionServices(),
+                QueryServices = new GameQueryServices(),
+                RemoteServices = new RemoteServices(defaultHostServer, fallbackHostServer)
+            };
             initializationOperation = package.InitializeAsync(createParameters);
         }
 
@@ -115,7 +120,7 @@ public class YooAssetHotUpdate : Singleton<YooAssetHotUpdate>
     private IEnumerator GetPackageVersion() {
         yield return new WaitForSecondsRealtime(0.5f);
 
-        var package = YooAssets.GetPackage("DefaultPackage");
+        var package = YooAssets.GetPackage(SFConstDefine.DefaultPackageName);
         var operation = package.UpdatePackageVersionAsync();
         yield return operation;
 
@@ -135,7 +140,7 @@ public class YooAssetHotUpdate : Singleton<YooAssetHotUpdate>
         yield return new WaitForSecondsRealtime(0.5f);
 
         bool savePackageVersion = true;
-        var package = YooAssets.GetPackage("DefaultPackage");
+        var package = YooAssets.GetPackage(SFConstDefine.DefaultPackageName);
         var operation = package.UpdatePackageManifestAsync(mPackageVersion, savePackageVersion);
         yield return operation;
 
@@ -183,7 +188,7 @@ public class YooAssetHotUpdate : Singleton<YooAssetHotUpdate>
     /// 清理未使用的缓存文件
     /// </summary>
     private IEnumerator ClearCache() {
-        var package = YooAssets.GetPackage("DefaultPackage");
+        var package = YooAssets.GetPackage(SFConstDefine.DefaultPackageName);
         var operation = package.ClearUnusedCacheFilesAsync();
         yield return operation;
     }

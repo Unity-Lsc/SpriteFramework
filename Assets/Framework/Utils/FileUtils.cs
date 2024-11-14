@@ -8,7 +8,7 @@ using UnityEngine;
 public class FileUtils
 {
 
-    private static string mAssetFolderName = "Assets";
+    private static readonly string mAssetFolderName = "Assets";
 
     /// <summary>
     /// 把双反斜杠\\转换成单斜杠/
@@ -37,8 +37,8 @@ public class FileUtils
     /// <summary>
     /// 获取文件的扩展名
     /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
+    /// <param name="path">文件的路径</param>
+    /// <returns>文件的扩展名</returns>
     public static string GetFileExtension(string path) {
         return Path.GetExtension(path).ToLower();
     }
@@ -47,8 +47,8 @@ public class FileUtils
     /// 通过限定条件检索文件列表
     /// </summary>
     /// <param name="extensions">通过扩展名进行检索</param>
-    /// <param name="exclude">是否包含(当为false,是根据所给的扩展名寻找;当为false,是寻找给定的扩展名以外的文件)</param>
-    /// <returns></returns>
+    /// <param name="exclude">是否排除(当为false,是根据所给的扩展名寻找;当为true,是寻找给定的扩展名以外的文件)</param>
+    /// <returns>返回符合限定条件的文件列表</returns>
     public static string[] GetFilesPathByCondition(string path, string[] extensions = null, bool exclude = false) {
         if (string.IsNullOrEmpty(path)) return null;
         if (extensions == null) {
@@ -111,6 +111,7 @@ public class FileUtils
     /// <returns></returns>
     public static bool SafeWriteAllBytes(string outFile, byte[] outBytes) {
         try {
+            if (string.IsNullOrEmpty(outFile)) return false;
             CheckFileAndCreateDir(outFile);
             if (File.Exists(outFile)) {
                 //设置文件属性为正常
@@ -119,7 +120,7 @@ public class FileUtils
             File.WriteAllBytes(outFile, outBytes);
             return true;
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeWriteAllBytes failed! path = {0} with error: {1}", outFile, ex.Message));
+            Debugger.LogError("SafeWriteAllBytes failed! path = {0} with error: {1}", outFile, ex.Message);
             return false;
         }
     }
@@ -129,6 +130,7 @@ public class FileUtils
     /// </summary>
     public static bool SafeWriteAllLines(string outFile, string[] outLines) {
         try {
+            if (string.IsNullOrEmpty(outFile)) return false;
             CheckFileAndCreateDir(outFile);
             if (File.Exists(outFile)) {
                 //设置文件属性为正常
@@ -147,6 +149,7 @@ public class FileUtils
     /// </summary>
     public static bool SafeWriteAllText(string outFile, string text) {
         try {
+            if (string.IsNullOrEmpty(outFile)) return false;
             CheckFileAndCreateDir(outFile);
             if (File.Exists(outFile)) {
                 //设置文件属性为正常

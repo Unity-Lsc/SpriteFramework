@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
   m_Name: AssetBundleCollectorSetting
   m_EditorClassIdentifier: 
-  ShowPackageView: 1
+  ShowPackageView: 0
   EnableAddressable: 0
   LocationToLower: 0
   IncludeAssetGUID: 0
@@ -22,16 +22,29 @@ MonoBehaviour:
   - PackageName: DefaultPackage
     PackageDesc: 
     Groups:
-    - GroupName: Default Group
-      GroupDesc: 
+    - GroupName: DataTable
+      GroupDesc: "\u914D\u7F6E\u8868"
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: 
-        CollectorGUID: 
+      - CollectPath: Assets/Game/AssetsPackage/DataTable
+        CollectorGUID: cbf64ac265c470d4385d01c1c798fd9f
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags: 
+        AssetTags: GameConfig
+        UserData: 
+    - GroupName: Scenes
+      GroupDesc: "\u6E38\u620F\u573A\u666F"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Game/AssetsPackage/Scenes
+        CollectorGUID: 77342a2b471c3c64eb549fd1eb23aedf
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: GameScene
         UserData: 

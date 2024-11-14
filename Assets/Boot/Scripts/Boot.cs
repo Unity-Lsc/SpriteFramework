@@ -44,10 +44,8 @@ public class Boot : UnitySingleton<Boot>
         //end
 
         //进入游戏
-        GameEntry.Instance.EnterGame();
+        yield return GameEntry.Instance.EnterGame();
         //end
-
-        yield break;
     }
 
     /// <summary>
