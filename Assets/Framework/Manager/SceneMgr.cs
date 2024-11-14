@@ -7,11 +7,11 @@ namespace SpriteFramework
     /// <summary>
     /// 场景管理器
     /// </summary>
-    public class SceneMgr : UnitySingleton<SceneMgr>
+    public class SceneMgr : UnitySingleton<SceneMgr>, IBaseManager
     {
 
         public void Init() {
-
+            Boot.Instance.RegisterBaseManager(this);
         }
 
         /// <summary>
@@ -34,6 +34,10 @@ namespace SpriteFramework
             } else {
                 Debug.LogErrorFormat("Scene:{0} load failed!", sceneName);
             }
+
+        }
+
+        public void Dispose() {
 
         }
 

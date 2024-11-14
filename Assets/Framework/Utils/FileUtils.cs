@@ -139,7 +139,7 @@ public class FileUtils
             File.WriteAllLines(outFile, outLines);
             return true;
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeWriteAllLines failed! path = {0} with error: {1}", outFile, ex.Message));
+            Debugger.LogError("SafeWriteAllLines failed! path = {0} with error: {1}", outFile, ex.Message);
             return false;
         }
     }
@@ -158,7 +158,7 @@ public class FileUtils
             File.WriteAllText(outFile, text);
             return true;
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeWriteAllText failed! path = {0} with error: {1}", outFile, ex.Message));
+            Debugger.LogError("SafeWriteAllText failed! path = {0} with error: {1}", outFile, ex.Message);
             return false;
         }
     }
@@ -175,7 +175,7 @@ public class FileUtils
             File.SetAttributes(inFile, FileAttributes.Normal);
             return File.ReadAllBytes(inFile);
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeReadAllBytes failed! path = {0} with error = {1}", inFile, ex.Message));
+            Debugger.LogError("SafeReadAllBytes failed! path = {0} with error = {1}", inFile, ex.Message);
             return null;
         }
     }
@@ -196,7 +196,7 @@ public class FileUtils
             File.SetAttributes(inFile, FileAttributes.Normal);
             return File.ReadAllLines(inFile);
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeReadAllLines failed! path = {0} with error = {1}", inFile, ex.Message));
+            Debugger.LogError("SafeReadAllLines failed! path = {0} with error = {1}", inFile, ex.Message);
             return null;
         }
     }
@@ -217,7 +217,7 @@ public class FileUtils
             File.SetAttributes(inFile, FileAttributes.Normal);
             return File.ReadAllText(inFile);
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeReadAllText failed! path = {0} with error = {1}", inFile, ex.Message));
+            Debugger.LogError("SafeReadAllText failed! path = {0} with error = {1}", inFile, ex.Message);
             return null;
         }
     }
@@ -256,7 +256,7 @@ public class FileUtils
             Directory.CreateDirectory(folderPath);
             return true;
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeClearDir failed! path = {0} with error = {1}", folderPath, ex.Message));
+            Debugger.LogError("SafeClearDir failed! path = {0} with error = {1}", folderPath, ex.Message);
             return false;
         }
     }
@@ -275,7 +275,7 @@ public class FileUtils
             }
             return true;
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeDeleteDir failed! path = {0} with error: {1}", folderPath, ex.Message));
+            Debugger.LogError("SafeDeleteDir failed! path = {0} with error: {1}", folderPath, ex.Message);
             return false;
         }
     }
@@ -296,7 +296,7 @@ public class FileUtils
             File.Delete(filePath);
             return true;
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeDeleteFile failed! path = {0} with error: {1}", filePath, ex.Message));
+            Debugger.LogError("SafeDeleteFile failed! path = {0} with error: {1}", filePath, ex.Message);
             return false;
         }
     }
@@ -317,7 +317,7 @@ public class FileUtils
             File.Move(sourceFileName, destFileName);
             return true;
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeRenameFile failed! path = {0} with error: {1}", sourceFileName, ex.Message));
+            Debugger.LogError("SafeRenameFile failed! path = {0} with error: {1}", sourceFileName, ex.Message);
             return false;
         }
     }
@@ -341,8 +341,7 @@ public class FileUtils
             File.Copy(fromFile, toFile, true);
             return true;
         } catch (System.Exception ex) {
-            Debug.LogError(string.Format("SafeCopyFile failed! formFile = {0}, toFile = {1}, with error = {2}",
-                fromFile, toFile, ex.Message));
+            Debugger.LogError("SafeCopyFile failed! formFile = {0}, toFile = {1}, with error = {2}", fromFile, toFile, ex.Message);
             return false;
         }
     }

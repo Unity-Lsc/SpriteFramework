@@ -1,5 +1,6 @@
 using SpriteFramework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
 
@@ -16,11 +17,18 @@ public class Boot : UnitySingleton<Boot>
 
     public string RemoteURL = "http://127.0.0.1:6080";
 
+    /// <summary>
+    /// 基础管理类列表
+    /// </summary>
+    private LinkedList<IBaseManager> mBaseManagerList;
+
     public override void Awake() {
         base.Awake();
 
         Application.targetFrameRate = 60;
         Application.runInBackground = true;
+
+        mBaseManagerList = new LinkedList<IBaseManager>();
 
         StartCoroutine(BootStartUp());
     }
@@ -62,8 +70,24 @@ public class Boot : UnitySingleton<Boot>
     IEnumerator InitFramework() {
         gameObject.AddComponent<ResMgr>().Init();
         gameObject.AddComponent<SceneMgr>().Init();
+        gameObject.AddComponent<EventMgr>().Init();
+
         gameObject.AddComponent<GameEntry>().Init();
         yield break;
+    }
+
+    /// <summary>
+    /// 注册基础管理类
+    /// </summary>
+    public void RegisterBaseManager(IBaseManager manager) {
+        mBaseManagerList.AddLast(manager);
+    }
+
+    private void OnDestroy() {
+        for (var curNode = mBaseManagerList.First; curNode != null; curNode = curNode.Next) {
+            curNode.Value.Dispose();
+        }
+        mBaseManagerList.Clear();
     }
 
 }
