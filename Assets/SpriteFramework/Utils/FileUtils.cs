@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using SpriteFramework;
 
 /// <summary>
 /// 文件工具类(调用操作系统的文件API,方便操作文件和目录等)
@@ -120,7 +121,7 @@ public class FileUtils
             File.WriteAllBytes(outFile, outBytes);
             return true;
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeWriteAllBytes failed! path = {0} with error: {1}", outFile, ex.Message);
+            GameEntry.LogError("SafeWriteAllBytes failed! path = {0} with error: {1}", outFile, ex.Message);
             return false;
         }
     }
@@ -139,7 +140,7 @@ public class FileUtils
             File.WriteAllLines(outFile, outLines);
             return true;
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeWriteAllLines failed! path = {0} with error: {1}", outFile, ex.Message);
+            GameEntry.LogError("SafeWriteAllLines failed! path = {0} with error: {1}", outFile, ex.Message);
             return false;
         }
     }
@@ -158,7 +159,7 @@ public class FileUtils
             File.WriteAllText(outFile, text);
             return true;
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeWriteAllText failed! path = {0} with error: {1}", outFile, ex.Message);
+            GameEntry.LogError("SafeWriteAllText failed! path = {0} with error: {1}", outFile, ex.Message);
             return false;
         }
     }
@@ -175,7 +176,7 @@ public class FileUtils
             File.SetAttributes(inFile, FileAttributes.Normal);
             return File.ReadAllBytes(inFile);
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeReadAllBytes failed! path = {0} with error = {1}", inFile, ex.Message);
+            GameEntry.LogError("SafeReadAllBytes failed! path = {0} with error = {1}", inFile, ex.Message);
             return null;
         }
     }
@@ -196,7 +197,7 @@ public class FileUtils
             File.SetAttributes(inFile, FileAttributes.Normal);
             return File.ReadAllLines(inFile);
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeReadAllLines failed! path = {0} with error = {1}", inFile, ex.Message);
+            GameEntry.LogError("SafeReadAllLines failed! path = {0} with error = {1}", inFile, ex.Message);
             return null;
         }
     }
@@ -217,7 +218,7 @@ public class FileUtils
             File.SetAttributes(inFile, FileAttributes.Normal);
             return File.ReadAllText(inFile);
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeReadAllText failed! path = {0} with error = {1}", inFile, ex.Message);
+            GameEntry.LogError("SafeReadAllText failed! path = {0} with error = {1}", inFile, ex.Message);
             return null;
         }
     }
@@ -256,7 +257,7 @@ public class FileUtils
             Directory.CreateDirectory(folderPath);
             return true;
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeClearDir failed! path = {0} with error = {1}", folderPath, ex.Message);
+            GameEntry.LogError("SafeClearDir failed! path = {0} with error = {1}", folderPath, ex.Message);
             return false;
         }
     }
@@ -275,7 +276,7 @@ public class FileUtils
             }
             return true;
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeDeleteDir failed! path = {0} with error: {1}", folderPath, ex.Message);
+            GameEntry.LogError("SafeDeleteDir failed! path = {0} with error: {1}", folderPath, ex.Message);
             return false;
         }
     }
@@ -296,7 +297,7 @@ public class FileUtils
             File.Delete(filePath);
             return true;
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeDeleteFile failed! path = {0} with error: {1}", filePath, ex.Message);
+            GameEntry.LogError("SafeDeleteFile failed! path = {0} with error: {1}", filePath, ex.Message);
             return false;
         }
     }
@@ -317,7 +318,7 @@ public class FileUtils
             File.Move(sourceFileName, destFileName);
             return true;
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeRenameFile failed! path = {0} with error: {1}", sourceFileName, ex.Message);
+            GameEntry.LogError("SafeRenameFile failed! path = {0} with error: {1}", sourceFileName, ex.Message);
             return false;
         }
     }
@@ -341,7 +342,7 @@ public class FileUtils
             File.Copy(fromFile, toFile, true);
             return true;
         } catch (System.Exception ex) {
-            Debugger.LogError("SafeCopyFile failed! formFile = {0}, toFile = {1}, with error = {2}", fromFile, toFile, ex.Message);
+            GameEntry.LogError("SafeCopyFile failed! formFile = {0}, toFile = {1}, with error = {2}", fromFile, toFile, ex.Message);
             return false;
         }
     }

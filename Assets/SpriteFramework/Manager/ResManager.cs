@@ -6,12 +6,8 @@ namespace SpriteFramework
     /// <summary>
     /// 资源管理器
     /// </summary>
-    public class ResMgr : UnitySingleton<ResMgr>, IBaseManager
+    public class ResManager
     {
-
-        public void Init() {
-            Boot.Instance.RegisterBaseManager(this);
-        }
 
         /// <summary>
         /// 异步加载资源
@@ -119,10 +115,6 @@ namespace SpriteFramework
                 return;
             }
             package.UnloadUnusedAssets();
-        }
-
-        public void Dispose() {
-            
         }
     }
 }

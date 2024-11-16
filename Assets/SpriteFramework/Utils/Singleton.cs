@@ -9,7 +9,7 @@ public abstract class Singleton<T> where T : new()
     private static T mInstance;
 
     //为了线程安全 互斥变量
-    private static object mutex = new object();
+    private static readonly object mutex = new();
 
     public static T Instance {
         get {

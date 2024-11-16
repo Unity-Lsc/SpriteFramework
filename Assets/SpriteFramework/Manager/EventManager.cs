@@ -5,7 +5,7 @@ namespace SpriteFramework
     /// <summary>
     /// 事件管理器
     /// </summary>
-    public class EventMgr : UnitySingleton<EventMgr>, IBaseManager
+    public class EventManager
     {
 
         public delegate void OnActionHandler(object param);
@@ -13,21 +13,20 @@ namespace SpriteFramework
         /// <summary>
         /// 事件回调的存储列表
         /// </summary>
-        public Dictionary<ushort, LinkedList<OnActionHandler>> mEventDict;
+        public Dictionary<ushort, LinkedList<OnActionHandler>> m_EventDict;
 
-        public void Init() {
-            Boot.Instance.RegisterBaseManager(this);
-            mEventDict = new Dictionary<ushort, LinkedList<OnActionHandler>>();
+        public EventManager() {
+            m_EventDict = new Dictionary<ushort, LinkedList<OnActionHandler>>();
         }
 
         /// <summary>
         /// 添加事件监听
         /// </summary>
         public void AddListener(ushort key, OnActionHandler handler) {
-            mEventDict.TryGetValue(key, out LinkedList<OnActionHandler> handlerLst);
+            m_EventDict.TryGetValue(key, out LinkedList<OnActionHandler> handlerLst);
             if (handlerLst == null) {
                 handlerLst = new LinkedList<OnActionHandler>();
-                mEventDict[key] = handlerLst;
+                m_EventDict[key] = handlerLst;
             }
             handlerLst.AddLast(handler);
         }
@@ -36,11 +35,11 @@ namespace SpriteFramework
         /// 移除事件监听
         /// </summary>
         public void RemoveListener(ushort key, OnActionHandler handler) {
-            mEventDict.TryGetValue(key, out LinkedList<OnActionHandler> handlerLst);
+            m_EventDict.TryGetValue(key, out LinkedList<OnActionHandler> handlerLst);
             if (handlerLst != null) {
                 handlerLst.Remove(handler);
                 if (handlerLst.Count <= 0) {
-                    mEventDict.Remove(key);
+                    m_EventDict.Remove(key);
                 }
             }
         }
@@ -49,12 +48,12 @@ namespace SpriteFramework
         /// 移除某个key下的所有事件监听
         /// </summary>
         public void RemoveListener(ushort key) {
-            mEventDict.TryGetValue(key, out LinkedList<OnActionHandler> handlerLst);
+            m_EventDict.TryGetValue(key, out LinkedList<OnActionHandler> handlerLst);
             if (handlerLst != null) {
                 for (var curNode = handlerLst.First; curNode != null; curNode = curNode.Next) {
                     handlerLst.Remove(curNode.Value);
                 }
-                mEventDict.Remove(key);
+                m_EventDict.Remove(key);
             }
         }
 
@@ -62,7 +61,7 @@ namespace SpriteFramework
         /// 事件派发
         /// </summary>
         public void Dispatch(ushort key, object param = null) {
-            mEventDict.TryGetValue(key, out LinkedList<OnActionHandler> handlerLst);
+            m_EventDict.TryGetValue(key, out LinkedList<OnActionHandler> handlerLst);
             if (handlerLst != null) {
                 for (var curNode = handlerLst.First; curNode != null; curNode = curNode.Next) {
                     var handler = curNode.Value;
@@ -72,7 +71,7 @@ namespace SpriteFramework
         }
 
         public void Dispose() {
-            mEventDict.Clear();
+            m_EventDict.Clear();
         }
 
     }
