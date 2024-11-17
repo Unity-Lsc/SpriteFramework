@@ -118,7 +118,7 @@ namespace SpriteFramework
         public void TillTimeEnd() {
             //以下代码 间隔m_Interval 时间 执行一次
             if (Target == null) {
-                GameEntry.LogWarning("TimeAction.OnUpdateAction.Target==null");
+                GameEntry.LogWarning("TimeAction.OnUpdateCallback.Target==null");
                 return;
             }
             m_CurrLoop++;
@@ -127,7 +127,7 @@ namespace SpriteFramework
             //-1表示无限次循环, 那么永远不会执行OnCompleteCallback
             if (m_CurrLoop >= m_Loop && m_Loop != -1) {
                 if (Target == null) {
-                    GameEntry.LogWarning("TimeAction.OnUpdateAction.Target==null");
+                    GameEntry.LogWarning("TimeAction.OnUpdateCallback.Target==null");
                     return;
                 }
                 //完成了，执行OnCompleteAction，结束循环

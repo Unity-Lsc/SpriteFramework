@@ -1,7 +1,7 @@
 using UnityEngine;
 using SpriteFramework;
 
-public class TestTime : MonoBehaviour
+public class TimeExample : MonoBehaviour
 {
 
     private TimeAction m_TimeAction;

@@ -124,7 +124,7 @@ namespace SpriteFramework
         }
 
         /// <summary>
-        /// 创建定时器，可循环多次
+        /// 创建定时器(可循环多次)
         /// </summary>
         /// <param name="interval">间隔时间</param>
         /// <param name="loop">循环次数(默认1次)</param>
