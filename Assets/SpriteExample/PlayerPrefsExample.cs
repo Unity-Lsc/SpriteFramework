@@ -16,8 +16,8 @@ public class PlayerPrefsExample : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.A)) {
             //性能好, 存入本地存档
             GameEntry.PlayerPrefs.SetFloat(PlayerPrefsConstKey.MasterVolume, 1);
-            GameEntry.PlayerPrefs.SetFloat(PlayerPrefsConstKey.AudioVolume, 1);
-            GameEntry.PlayerPrefs.SetFloat(PlayerPrefsConstKey.BGMVolume, 1);
+            GameEntry.PlayerPrefs.SetFloat(PlayerPrefsConstKey.SoundVolume, 1);
+            GameEntry.PlayerPrefs.SetFloat(PlayerPrefsConstKey.BgmVolume, 1);
         }
         if (Input.GetKeyUp(KeyCode.D)) {
             //获取本地存档

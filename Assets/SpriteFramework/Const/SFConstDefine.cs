@@ -20,9 +20,14 @@ namespace SpriteFramework
         public const string DataTableRoot = "Assets/Game/AssetsPackage/DataTable/";
 
         /// <summary>
+        /// 背景音乐的根路径
+        /// </summary>
+        public const string BgmRoot = "Assets/Game/AssetsPackage/Audio/BGM/";
+
+        /// <summary>
         /// 音效的根路径
         /// </summary>
-        public const string SoundRoot = "Assets/Game/AssetsPackage/Sounds/";
+        public const string SoundRoot = "Assets/Game/AssetsPackage/Audio/Sounds/";
 
         /// <summary>
         /// 场景的根路径

@@ -97,6 +97,15 @@ namespace SpriteFramework
         /// <summary>
         /// 同步加载声音文件
         /// </summary>
+        /// <param name="bgmName">加载的背景音乐文件名字</param>
+        public T LoadBgm<T>(string bgmName, string packageName = null) where T : UnityEngine.Object {
+            string soundPath = Path.Combine(SFConstDefine.BgmRoot, bgmName);
+            return LoadAsset<T>(soundPath, packageName);
+        }
+
+        /// <summary>
+        /// 同步加载声音文件
+        /// </summary>
         /// <param name="soundName">加载的声音文件名字</param>
         public T LoadSound<T>(string soundName, string packageName = null) where T : UnityEngine.Object {
             string soundPath = Path.Combine(SFConstDefine.SoundRoot, soundName);

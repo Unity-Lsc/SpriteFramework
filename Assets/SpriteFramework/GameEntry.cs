@@ -15,6 +15,7 @@ namespace SpriteFramework
         public static ResManager Resource { get; private set; }
         public static SpriteSceneManager Scene { get; private set; }
         public static PlayerPrefsManager PlayerPrefs { get; private set; }
+        public static AudioManager Audio { get; private set; }
 
         public static GameEntry Instance { get; private set; }
 
@@ -32,9 +33,10 @@ namespace SpriteFramework
             Resource = new ResManager();
             Scene = new SpriteSceneManager();
             PlayerPrefs = new PlayerPrefsManager();
+            Audio = new AudioManager();
 
             //在Init中, 模块之间可互相调用
-            //XX.Init();
+            Audio.Init();
 
             EnterGame();
         }
@@ -51,6 +53,7 @@ namespace SpriteFramework
         private void Update() {
             //模块的OnUpdate,统一在这里调用
             Time.OnUpdate();
+            Audio.OnUpdate();
         }
 
         private IEnumerator TestGame() {
@@ -133,6 +136,7 @@ namespace SpriteFramework
         private void OnDestroy() {
             Event.Dispose();
             PlayerPrefs.Dispose();
+            Audio.Dispose();
         }
 
     }
