@@ -135,6 +135,10 @@ namespace SpriteFramework
                 GameEntry.LogError("音效:{0} 为null,请检查路径", soundName);
                 return -1;
             }
+            return PlaySound(clip, isLoop, volume);
+        }
+
+        public int PlaySound(AudioClip clip, bool isLoop = false, float volume = 1.0f) {
             int soundId = m_CurIndex;
             AudioSource source = m_AudioSourceList[m_CurIndex];
             m_CurIndex++;
