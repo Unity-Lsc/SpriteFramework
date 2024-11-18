@@ -16,6 +16,7 @@ namespace SpriteFramework
         public static SpriteSceneManager Scene { get; private set; }
         public static PlayerPrefsManager PlayerPrefs { get; private set; }
         public static AudioManager Audio { get; private set; }
+        public static DataTableManager DataTable { get; private set; }
 
         public static GameEntry Instance { get; private set; }
 
@@ -34,6 +35,7 @@ namespace SpriteFramework
             Scene = new SpriteSceneManager();
             PlayerPrefs = new PlayerPrefsManager();
             Audio = new AudioManager();
+            DataTable = new DataTableManager();
 
             //在Init中, 模块之间可互相调用
             Audio.Init();
@@ -57,17 +59,19 @@ namespace SpriteFramework
         }
 
         private IEnumerator TestGame() {
-            //测试同步加载资源
-            TextAsset t = Resource.LoadDataTable<TextAsset>("fruit");
-            Debug.Log(t.text);
+            //测试同步加载数据表
+            DataTable.LoadDataTable();
+            var entity = DataTable.DTRechargeShopDBModel.GetDict(1001);
+            Log("开始打印数据表");
+            Log(entity.Name);
             //end
 
             //测试异步加载资源
-            var handle = Resource.LoadDataTableAsync<TextAsset>("fragment");
-            yield return handle;
-            t = handle.AssetObject as TextAsset;
-            handle.Dispose();
-            Debug.Log(t.text);
+            //var handle = Resource.LoadDataTableAsync("fragment");
+            //yield return handle;
+            //t = handle.AssetObject as TextAsset;
+            //handle.Dispose();
+            //Debug.Log(t.text);
             //end
 
             yield return Scene.LoadScene("Main");
@@ -137,6 +141,7 @@ namespace SpriteFramework
             Event.Dispose();
             PlayerPrefs.Dispose();
             Audio.Dispose();
+            DataTable.Dispose();
         }
 
     }

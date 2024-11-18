@@ -1,0 +1,7 @@
+G:\UnityProject\SpriteFramework\Excel\ExcelTool\bin\Debug\ExcelTool.exe.config
+G:\UnityProject\SpriteFramework\Excel\ExcelTool\bin\Debug\ExcelTool.exe
+G:\UnityProject\SpriteFramework\Excel\ExcelTool\bin\Debug\ExcelTool.pdb
+G:\UnityProject\SpriteFramework\Excel\ExcelTool\obj\Debug\ExcelTool.csproj.AssemblyReference.cache
+G:\UnityProject\SpriteFramework\Excel\ExcelTool\obj\Debug\ExcelTool.csproj.CoreCompileInputs.cache
+G:\UnityProject\SpriteFramework\Excel\ExcelTool\obj\Debug\ExcelTool.exe
+G:\UnityProject\SpriteFramework\Excel\ExcelTool\obj\Debug\ExcelTool.pdb

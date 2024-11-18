@@ -1,0 +1,3 @@
+..\..\..\Tables
+..\..\..\..\Assets\Game\AssetsPackage\DataTable\
+..\..\..\..\Assets\Game\Scripts\Data\DataTable\Create\

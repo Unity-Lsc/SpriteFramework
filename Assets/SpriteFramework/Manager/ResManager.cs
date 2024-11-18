@@ -1,4 +1,5 @@
 using System.IO;
+using UnityEngine;
 using YooAsset;
 
 namespace SpriteFramework
@@ -71,45 +72,45 @@ namespace SpriteFramework
         /// 异步加载配置文件
         /// </summary>
         /// <param name="dataTableName">加载的配置文件名字</param>
-        public AssetOperationHandle LoadDataTableAsync<T>(string dataTableName, string packageName = null) where T : UnityEngine.Object {
+        public AssetOperationHandle LoadDataTableAsync(string dataTableName, string packageName = null) {
             string dataTablePath = Path.Combine(SFConstDefine.DataTableRoot, dataTableName);
-            return LoadAssetAsync<T>(dataTablePath,packageName);
-        }
-
-        /// <summary>
-        /// 异步加载声音文件
-        /// </summary>
-        /// <param name="audioName">加载的声音文件名字</param>
-        public AssetOperationHandle LoadSoundAsync<T>(string audioName, string packageName = null) where T : UnityEngine.Object {
-            string soundPath = Path.Combine(SFConstDefine.SoundRoot, audioName);
-            return LoadAssetAsync<T>(soundPath, packageName);
+            return LoadAssetAsync<TextAsset>(dataTablePath,packageName);
         }
 
         /// <summary>
         /// 同步加载配置文件
         /// </summary>
         /// <param name="dataTableName">加载的配置文件名字</param>
-        public T LoadDataTable<T>(string dataTableName, string packageName = null) where T : UnityEngine.Object {
+        public TextAsset LoadDataTable(string dataTableName, string packageName = null) {
             string dataTablePath = Path.Combine(SFConstDefine.DataTableRoot, dataTableName);
-            return LoadAsset<T>(dataTablePath, packageName);
+            return LoadAsset<TextAsset>(dataTablePath, packageName);
         }
 
         /// <summary>
-        /// 同步加载声音文件
+        /// 异步加载音频文件
+        /// </summary>
+        /// <param name="audioName">加载的声音文件名字</param>
+        public AssetOperationHandle LoadSoundAsync(string audioName, string packageName = null) {
+            string soundPath = Path.Combine(SFConstDefine.SoundRoot, audioName);
+            return LoadAssetAsync<AudioClip>(soundPath, packageName);
+        }
+
+        /// <summary>
+        /// 同步加载背景音乐
         /// </summary>
         /// <param name="bgmName">加载的背景音乐文件名字</param>
-        public T LoadBgm<T>(string bgmName, string packageName = null) where T : UnityEngine.Object {
+        public AudioClip LoadBgm(string bgmName, string packageName = null) {
             string soundPath = Path.Combine(SFConstDefine.BgmRoot, bgmName);
-            return LoadAsset<T>(soundPath, packageName);
+            return LoadAsset<AudioClip>(soundPath, packageName);
         }
 
         /// <summary>
-        /// 同步加载声音文件
+        /// 同步加载音效
         /// </summary>
         /// <param name="soundName">加载的声音文件名字</param>
-        public T LoadSound<T>(string soundName, string packageName = null) where T : UnityEngine.Object {
+        public AudioClip LoadSound(string soundName, string packageName = null) {
             string soundPath = Path.Combine(SFConstDefine.SoundRoot, soundName);
-            return LoadAsset<T>(soundPath, packageName);
+            return LoadAsset<AudioClip>(soundPath, packageName);
         }
 
         #endregion 封装的具体加载资源的方法end

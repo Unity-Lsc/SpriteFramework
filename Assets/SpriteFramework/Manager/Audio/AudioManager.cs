@@ -80,7 +80,7 @@ namespace SpriteFramework
         /// <param name="volume">背景音乐的音量</param>
         /// <param name="isFadeIn">是否淡入</param>
         public void PlayBgm(string soundName, bool isLoop = true, float volume = 1.0f, bool isFadeIn = true) {
-            AudioClip clip = GameEntry.Resource.LoadBgm<AudioClip>(soundName);
+            AudioClip clip = GameEntry.Resource.LoadBgm(soundName);
             if(clip == null) {
                 GameEntry.LogError("背景音乐:{0} 为null,请检查路径", soundName);
                 return;
@@ -130,7 +130,7 @@ namespace SpriteFramework
         /// <param name="soundName">音效的名字</param>
         /// <param name="isLoop">是否循环播放</param>
         public int PlaySound(string soundName, bool isLoop = false, float volume = 1.0f) {
-            AudioClip clip = GameEntry.Resource.LoadSound<AudioClip>(soundName);
+            AudioClip clip = GameEntry.Resource.LoadSound(soundName);
             if (clip == null) {
                 GameEntry.LogError("音效:{0} 为null,请检查路径", soundName);
                 return -1;
@@ -162,7 +162,7 @@ namespace SpriteFramework
         /// <param name="soundName">音效的名字</param>
         /// <param name="isLoop">是否循环播放</param>
         public int PlaySoundOneShot(string soundName, bool isLoop = false, float volume = 1.0f) {
-            AudioClip clip = GameEntry.Resource.LoadSound<AudioClip>(soundName);
+            AudioClip clip = GameEntry.Resource.LoadSound(soundName);
             if (clip == null) {
                 GameEntry.LogError("音效:{0} 为null,请检查路径");
                 return -1;
