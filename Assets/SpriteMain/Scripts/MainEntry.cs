@@ -18,12 +18,19 @@ namespace SpriteMain
 
         public string RemoteURL = "http://127.0.0.1:6080";
 
-        public GameEntry GameEntry { get; private set; }
+        [SerializeField]
+        private ParamsSettings m_ParamsSettings;
+        /// <summary>
+        /// 全局参数设置
+        /// </summary>
+        public static ParamsSettings ParamsSettings { get; private set; }
 
         private void Awake() {
             DontDestroyOnLoad(gameObject);
+
             Application.targetFrameRate = 60;
             Application.runInBackground = true;
+            ParamsSettings = m_ParamsSettings;
 
             StartCoroutine(BootStartUp());
         }
@@ -61,8 +68,7 @@ namespace SpriteMain
         /// 框架初始化
         /// </summary>
         IEnumerator InitFramework() {
-            GameEntry = gameObject.AddComponent<GameEntry>();
-            GameEntry.Init();
+            gameObject.AddComponent<GameEntry>().Init();
             yield break;
         }
 

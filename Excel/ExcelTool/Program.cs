@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Data;
 using System.Data.OleDb;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 //如果要支持xlsx格式表格，请在本机电脑安装这个
 //http://download.microsoft.com/download/7/0/3/703ffbcb-dc0c-4e19-b0da-1463960fdcdb/AccessDatabaseEngine.exe
