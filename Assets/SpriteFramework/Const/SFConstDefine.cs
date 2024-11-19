@@ -30,6 +30,16 @@ namespace SpriteFramework
         public const string SoundRoot = "Assets/Game/AssetsPackage/Audio/Sounds/";
 
         /// <summary>
+        /// 预制体根路径
+        /// </summary>
+        public const string PrefabRoot = "Assets/Game/AssetsPackage/Prefab/";
+
+        /// <summary>
+        /// 角色预制体根路径
+        /// </summary>
+        public const string CharactorPrefabRoot = "Assets/Game/AssetsPackage/Prefab/Charactor/";
+
+        /// <summary>
         /// 场景的根路径
         /// </summary>
         public const string SceneRoot = "Assets/Game/AssetsPackage/Scenes/";

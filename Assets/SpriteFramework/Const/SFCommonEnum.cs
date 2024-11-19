@@ -35,3 +35,12 @@ public enum LoadingType
     /// </summary>
     ChangeScene = 1
 }
+
+namespace SpriteFramework
+{
+    public enum SpawnPoolId
+    {
+        Audio = -1,
+        Common = 1,
+    }
+}

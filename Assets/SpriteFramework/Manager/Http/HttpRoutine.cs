@@ -48,12 +48,11 @@ namespace SpriteFramework
 
         public HttpRoutine() {
             m_CallBackArgs = new HttpCallBackArgs();
-            m_Dict = new Dictionary<string, object>();
+            m_Dict = GameEntry.Pool.ClassObjectPool.Dequeue<Dictionary<string, object>>();
         }
 
         public static HttpRoutine Create() {
-            //TODO 使用对象池进行创建
-            return new HttpRoutine();
+            return GameEntry.Pool.ClassObjectPool.Dequeue<HttpRoutine>();
         }
 
         /// <summary>
@@ -121,15 +120,13 @@ namespace SpriteFramework
             m_Url = null;
             if (m_Dict != null) {
                 m_Dict.Clear();
-                //TODO 回收进对象池
-                //GameEntry.Pool.ClassObjectPool.Enqueue(m_Dic);
+                GameEntry.Pool.ClassObjectPool.Enqueue(m_Dict);
             }
             m_CallBackArgs.Data = null;
             data.Dispose();
             data = null;
 
-            //TODO
-            //GameEntry.Pool.ClassObjectPool.Enqueue(this);
+            GameEntry.Pool.ClassObjectPool.Enqueue(this);
         }
 
         private void GetUrl(string url) {

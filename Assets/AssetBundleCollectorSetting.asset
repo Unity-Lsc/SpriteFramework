@@ -59,5 +59,18 @@ MonoBehaviour:
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags: 
+        AssetTags: GameAudio
+        UserData: 
+    - GroupName: Charactor
+      GroupDesc: "\u6E38\u620F\u89D2\u8272"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Game/AssetsPackage/Prefab/Charactor
+        CollectorGUID: b9ae0aed6470a514cacd7ce586139274
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: Charactor
         UserData: 

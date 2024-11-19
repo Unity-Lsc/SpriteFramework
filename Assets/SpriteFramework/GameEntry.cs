@@ -18,6 +18,7 @@ namespace SpriteFramework
         public static AudioManager Audio { get; private set; }
         public static DataTableManager DataTable { get; private set; }
         public static HttpManager Http { get; private set; }
+        public static PoolManager Pool { get; private set; }
 
         public static GameEntry Instance { get; private set; }
 
@@ -38,6 +39,7 @@ namespace SpriteFramework
             Audio = new AudioManager();
             DataTable = new DataTableManager();
             Http = new HttpManager();
+            Pool = new PoolManager();
 
             //在Init中, 模块之间可互相调用
             Audio.Init();
@@ -58,6 +60,7 @@ namespace SpriteFramework
             //模块的OnUpdate,统一在这里调用
             Time.OnUpdate();
             Audio.OnUpdate();
+            Pool.OnUpdate();
         }
 
         private IEnumerator TestGame() {
@@ -144,6 +147,7 @@ namespace SpriteFramework
             PlayerPrefs.Dispose();
             Audio.Dispose();
             DataTable.Dispose();
+            Pool.Dispose();
         }
 
     }

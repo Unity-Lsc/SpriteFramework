@@ -62,12 +62,6 @@ public class ParamsSettings : ScriptableObject
     public int PoolReleaseClassObjectInterval = 30;
 
     /// <summary>
-    /// Asset池_释放间隔
-    /// </summary>
-    [Tooltip("Asset池_释放间隔")]
-    public int PoolReleaseAssetInterval = 60;
-
-    /// <summary>
     /// UI界面池_回池后过期时间_秒
     /// </summary>
     [Tooltip("UI界面池_回池后过期时间_秒")]
