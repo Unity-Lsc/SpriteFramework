@@ -7,7 +7,7 @@ public class DataTableExample : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.W)) {
-            var lst = GameEntry.DataTable.DTRechargeShopDBModel.GetList();
+            var lst = GameEntry.DataTable.DTRechargeShopDBModel.GetDatas();
             int count = lst.Count;
             for (int i = 0; i < count; i++) {
                 GameEntry.Log("价格:{0}", lst[i].Price);

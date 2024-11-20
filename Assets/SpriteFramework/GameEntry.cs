@@ -9,6 +9,11 @@ namespace SpriteFramework
     public class GameEntry : MonoBehaviour
     {
 
+        [Header("当前语言（要和本地化表的语言字段 一致）")]
+        [SerializeField]
+        private SpriteLanguage m_CurrLanguage;
+        public static SpriteLanguage CurLanguage;
+
         //管理器属性
         public static EventManager Event { get; private set; }
         public static TimeManager Time { get; private set; }
@@ -19,11 +24,13 @@ namespace SpriteFramework
         public static DataTableManager DataTable { get; private set; }
         public static HttpManager Http { get; private set; }
         public static PoolManager Pool { get; private set; }
+        public static LocalizationManager Localization { get; private set; }
 
         public static GameEntry Instance { get; private set; }
 
         private void Awake() {
             Instance = this;
+            CurLanguage = m_CurrLanguage;
         }
 
         /// <summary>
@@ -40,6 +47,7 @@ namespace SpriteFramework
             DataTable = new DataTableManager();
             Http = new HttpManager();
             Pool = new PoolManager();
+            Localization = new LocalizationManager();
 
             //在Init中, 模块之间可互相调用
             Audio.Init();

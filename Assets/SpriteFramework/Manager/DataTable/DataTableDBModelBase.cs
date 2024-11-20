@@ -60,7 +60,7 @@ namespace SpriteFramework
         /// 获取子类对应的数据实体List
         /// </summary>
         /// <returns></returns>
-        public List<P> GetList() {
+        public List<P> GetDatas() {
             return m_List;
         }
         #endregion
@@ -69,12 +69,12 @@ namespace SpriteFramework
         /// <summary>
         /// 根据ID获取实体
         /// </summary>
-        public P GetDict(int id) {
+        public P GetDataById(int id) {
             P p;
             if (m_Dic.TryGetValue(id, out p)) {
                 return p;
             } else {
-                //Debug.Log("该ID对应的数据实体不存在");
+                GameEntry.LogError("该ID:{0} 对应的数据实体不存在", id);
                 return null;
             }
         }

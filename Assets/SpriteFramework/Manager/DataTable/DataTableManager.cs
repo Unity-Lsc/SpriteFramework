@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpriteFramework
@@ -8,12 +9,17 @@ namespace SpriteFramework
     public class DataTableManager
     {
 
+        public LocalizationDBModel LocalizationDBModel { get; private set; }
+        
         public DTRechargeShopDBModel DTRechargeShopDBModel { get; private set; }
 
         /// <summary>
         /// 加载数据表的数据
         /// </summary>
         internal void LoadDataTable() {
+            //LocalizationDBModel不需要在这里LoadData, 而是在LocalizationManager里面LoadData
+            LocalizationDBModel = new LocalizationDBModel();
+
             DTRechargeShopDBModel = new DTRechargeShopDBModel();
             DTRechargeShopDBModel.LoadData();
         }

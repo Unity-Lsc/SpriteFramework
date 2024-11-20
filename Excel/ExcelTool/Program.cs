@@ -203,7 +203,7 @@ namespace ExcelTool
                                         ms.WriteByte(string.IsNullOrWhiteSpace(value) ? (byte)0 : byte.Parse(value));
                                         break;
                                     case "bool":
-                                        ms.WriteBool(string.IsNullOrWhiteSpace(value) ? false : bool.Parse(value));
+                                        ms.WriteBool((string.IsNullOrEmpty(value) || value == "假") ? false : (value == "真" ? true : bool.Parse(value)));
                                         break;
                                     case "double":
                                         ms.WriteDouble(string.IsNullOrWhiteSpace(value) ? 0 : double.Parse(value));
@@ -337,24 +337,13 @@ namespace ExcelTool
             string str = string.Empty;
 
             switch (type) {
-                case "byte":
-                    str = "Byte";
-                    break;
-                case "int":
-                    str = "Int";
-                    break;
-                case "short":
-                    str = "Short";
-                    break;
-                case "long":
-                    str = "Long";
-                    break;
-                case "float":
-                    str = "Float";
-                    break;
-                case "string":
-                    str = "UTF8String";
-                    break;
+                case "byte": str = "Byte"; break;
+                case "int": str = "Int"; break;
+                case "short": str = "Short"; break;
+                case "long": str = "Long"; break;
+                case "float": str = "Float"; break;
+                case "string": str = "UTF8String"; break;
+                case "bool": str = "Bool"; break;
             }
 
             return str;
