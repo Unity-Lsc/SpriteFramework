@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
+  m_Name: AssetBundleCollectorSetting
+  m_EditorClassIdentifier: 
+  ShowPackageView: 0
+  EnableAddressable: 0
+  LocationToLower: 0
+  IncludeAssetGUID: 0
+  UniqueBundleName: 0
+  ShowEditorAlias: 0
+  Packages:
+  - PackageName: DefaultPackage
+    PackageDesc: 
+    Groups:
+    - GroupName: DataTable
+      GroupDesc: "\u914D\u7F6E\u8868"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Game/AssetsPackage/DataTable
+        CollectorGUID: cbf64ac265c470d4385d01c1c798fd9f
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: GameConfig
+        UserData: 
+    - GroupName: Scenes
+      GroupDesc: "\u6E38\u620F\u573A\u666F"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Game/AssetsPackage/Scenes
+        CollectorGUID: 77342a2b471c3c64eb549fd1eb23aedf
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: GameScene
+        UserData: 
+    - GroupName: Audio
+      GroupDesc: "\u6E38\u620F\u58F0\u97F3"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Game/AssetsPackage/Audio
+        CollectorGUID: ba30180716b23a64387b051161c706c3
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: GameAudio
+        UserData: 
+    - GroupName: Charactor
+      GroupDesc: "\u6E38\u620F\u89D2\u8272"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Game/AssetsPackage/Prefab/Charactor
+        CollectorGUID: b9ae0aed6470a514cacd7ce586139274
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: Charactor
+        UserData: 
