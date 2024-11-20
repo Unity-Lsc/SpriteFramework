@@ -19,6 +19,12 @@ public class PoolExample : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.A)) {
            GameObject obj = CreateObj("Charactor/HanBing");
             m_List.Add(obj);
+
+            var handler = obj.GetOrAddCompponent<GameObjectDespawnHandle>();
+            handler.SetEnqueueDelayTime(3);
+            handler.OnComplete = () => {
+                GameEntry.Log("物体自动回池");
+            };
         }
         if (Input.GetKeyUp(KeyCode.S)) {
             GameObject obj = CreateObj("Charactor/NvQiang");
