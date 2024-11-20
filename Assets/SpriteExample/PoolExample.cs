@@ -46,7 +46,7 @@ public class PoolExample : MonoBehaviour
     private GameObject CreateObj(string name) {
         var obj = GameEntry.Pool.GameObjectPool.Dequeue(name);
         obj.transform.localPosition += vec;
-        vec += new Vector3(0, 0, 10);
+        vec += Vector3.one;
         return obj;
     }
 

@@ -134,7 +134,7 @@ namespace SpriteFramework
                     return null;
                 }
 
-                m_DespawnedList.AddLast(obj);
+                m_SpawnedList.AddLast(obj);
                 obj.SetActive(true);
             }
             return obj;
