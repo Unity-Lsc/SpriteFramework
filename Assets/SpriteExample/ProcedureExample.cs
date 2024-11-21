@@ -18,6 +18,7 @@ public class ProcedureExample : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.A)) {
             GameEntry.Procedure.ChangeState(ProcedureState.Preload);
+            GameEntry.Procedure.CurProcedureState.OnUpdate();
         }
 
         if (Input.GetKeyUp(KeyCode.S)) {
