@@ -26,6 +26,7 @@ namespace SpriteFramework
         public static HttpManager Http { get; private set; }
         public static PoolManager Pool { get; private set; }
         public static LocalizationManager Localization { get; private set; }
+        public static FsmManager Fsm { get; private set; }
 
         public static GameEntry Instance { get; private set; }
 
@@ -49,6 +50,7 @@ namespace SpriteFramework
             Http = new HttpManager();
             Pool = new PoolManager();
             Localization = new LocalizationManager();
+            Fsm = new FsmManager();
 
             //在Init中, 模块之间可互相调用
             Audio.Init();
@@ -157,6 +159,7 @@ namespace SpriteFramework
             Audio.Dispose();
             DataTable.Dispose();
             Pool.Dispose();
+            Fsm.Dispose();
         }
 
     }
