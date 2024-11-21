@@ -17,7 +17,7 @@
 - 资源（Resource）  使用的是第三方的YooAsset插件
 - 声音（Audio）  声音管理模块，支持全局音量调节, 音效音量单独配表
 - 本地数据存储（PlayerPrefs）  基于Unity内置的PlayerPrefs进行封装，支持存储Object对象，性能有优化
-- 有限状态机（FSM）  TODO
+- 有限状态机（FSM）  状态机管理模块，提供状态机的创建、使用和销毁功能，方便进行调用
 - 流程（Procedure）  TODO
 - 界面（UI）  TODO
 - 输入系统（Input）  TODO
