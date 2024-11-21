@@ -1,28 +1,26 @@
 namespace SpriteFramework
 {
     /// <summary>
-    /// bool变量
+    /// byte[]变量
     /// </summary>
-    public class VarBool : Variable<bool>
+    public class VarBytes : Variable<byte[]>
     {
-
         /// <summary>
         /// 分配一个对象
         /// </summary>
         /// <param name="value">初始值</param>
-        public static VarBool Alloc(bool value = false) {
-            VarBool var = GameEntry.Pool.VarObjectPool.DequeueVarObject<VarBool>();
+        public static VarBytes Alloc(byte[] value= null) {
+            VarBytes var = GameEntry.Pool.VarObjectPool.DequeueVarObject<VarBytes>();
             var.Value = value;
             var.AddRefCount();
             return var;
         }
 
         /// <summary>
-        /// VarBool -> bool
+        /// VarBytes -> byte[]
         /// </summary>
-        public static implicit operator bool(VarBool value) {
+        public static implicit operator byte[](VarBytes value) {
             return value.Value;
         }
-
     }
 }

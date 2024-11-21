@@ -1,28 +1,30 @@
+using UnityEngine;
+
 namespace SpriteFramework
 {
     /// <summary>
-    /// bool变量
+    /// Transform变量
     /// </summary>
-    public class VarBool : Variable<bool>
+    public class VarTransform : Variable<Transform>
     {
-
         /// <summary>
         /// 分配一个对象
         /// </summary>
         /// <param name="value">初始值</param>
-        public static VarBool Alloc(bool value = false) {
-            VarBool var = GameEntry.Pool.VarObjectPool.DequeueVarObject<VarBool>();
+        public static VarTransform Alloc(Transform value = null)
+        {
+            VarTransform var = GameEntry.Pool.VarObjectPool.DequeueVarObject<VarTransform>();
             var.Value = value;
             var.AddRefCount();
             return var;
         }
 
         /// <summary>
-        /// VarBool -> bool
+        /// VarTransform -> Transform
         /// </summary>
-        public static implicit operator bool(VarBool value) {
+        public static implicit operator Transform(VarTransform value)
+        {
             return value.Value;
         }
-
     }
 }

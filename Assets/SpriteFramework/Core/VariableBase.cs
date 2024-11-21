@@ -24,9 +24,9 @@ namespace SpriteFramework
         }
 
         /// <summary>
-        /// 保留对象
+        /// 引用计数+1（分配对象的时候）
         /// </summary>
-        public void Retain() {
+        public void AddRefCount() {
             ReferenceCount++;
         }
 
