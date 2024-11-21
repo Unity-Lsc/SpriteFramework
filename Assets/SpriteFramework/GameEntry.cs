@@ -12,6 +12,7 @@ namespace SpriteFramework
         [Header("当前语言（要和本地化表的语言字段 一致）")]
         [SerializeField]
         private SpriteLanguage m_CurrLanguage;
+
         public static SpriteLanguage CurLanguage;
 
         //管理器属性
