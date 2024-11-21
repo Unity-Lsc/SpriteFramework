@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace SpriteFramework
 {
@@ -50,7 +48,7 @@ namespace SpriteFramework
                 }
                 m_StateDict[(sbyte)i] = state;
             }
-            CurrStateType = -1;
+            CurStateType = -1;
         }
 
         /// <summary>
@@ -74,14 +72,14 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="newState">新状态的类型</param>
         public void ChangeState(sbyte newState) {
-            if (CurrStateType == newState) return;
+            if (CurStateType == newState) return;
 
             if(m_CurrState != null) {
                 m_CurrState.OnLeave();
             }
 
-            CurrStateType = newState;
-            m_CurrState = m_StateDict[CurrStateType];
+            CurStateType = newState;
+            m_CurrState = m_StateDict[CurStateType];
 
             //进入新的状态
             m_CurrState.OnEnter();
@@ -94,8 +92,8 @@ namespace SpriteFramework
         /// <param name="key"></param>
         /// <param name="value"></param>
         public void SetData<TData>(string key, TData value) {
-            Variable<TData> item = null;
-            if(m_ParamDict.TryGetValue(key, out VariableBase itemBase)) {
+            Variable<TData> item;
+            if (m_ParamDict.TryGetValue(key, out VariableBase itemBase)) {
                 item = itemBase as Variable<TData>;
             } else {
                 //参数原来不存在

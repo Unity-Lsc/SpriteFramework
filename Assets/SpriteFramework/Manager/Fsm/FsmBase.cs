@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace SpriteFramework
 {
     /// <summary>
@@ -18,7 +14,7 @@ namespace SpriteFramework
         /// <summary>
         /// 当前状态的类型
         /// </summary>
-        public sbyte CurrStateType;
+        public sbyte CurStateType;
 
         public FsmBase(int fsmId) {
             FsmId = fsmId;

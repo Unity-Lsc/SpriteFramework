@@ -27,6 +27,7 @@ namespace SpriteFramework
         public static PoolManager Pool { get; private set; }
         public static LocalizationManager Localization { get; private set; }
         public static FsmManager Fsm { get; private set; }
+        public static ProcedureManager Procedure { get; private set; }
 
         public static GameEntry Instance { get; private set; }
 
@@ -51,9 +52,11 @@ namespace SpriteFramework
             Pool = new PoolManager();
             Localization = new LocalizationManager();
             Fsm = new FsmManager();
+            Procedure = new ProcedureManager();
 
             //在Init中, 模块之间可互相调用
             Audio.Init();
+            Procedure.Init();
 
             EnterGame();
         }
@@ -63,7 +66,7 @@ namespace SpriteFramework
         /// </summary>
         private void EnterGame() {
             Log("进入游戏");
-
+            Procedure.ChangeState(ProcedureState.Launch);
             StartCoroutine(TestGame());
         }
 
@@ -72,6 +75,7 @@ namespace SpriteFramework
             Time.OnUpdate();
             Audio.OnUpdate();
             Pool.OnUpdate();
+            Procedure.OnUpdate();
         }
 
         private IEnumerator TestGame() {
