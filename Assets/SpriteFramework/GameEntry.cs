@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpriteFramework
 {
@@ -8,6 +9,18 @@ namespace SpriteFramework
     /// </summary>
     public class GameEntry : MonoBehaviour
     {
+        [Header("UI摄像机")]
+        public Camera UICamera;
+
+        [Header("根画布")]
+        public Canvas UIRootCanvas;
+
+        [Header("根画布的缩放")]
+        public CanvasScaler UIRootCanvasScaler;
+        public RectTransform UIRootRectTransform { get; private set; }
+
+        [Header("UI分组")]
+        public UIGroup[] UIGroups;
 
         [Header("当前语言（要和本地化表的语言字段 一致）")]
         [SerializeField]
@@ -29,12 +42,14 @@ namespace SpriteFramework
         public static FsmManager Fsm { get; private set; }
         public static ProcedureManager Procedure { get; private set; }
         public static SocketManager Socket { get; private set; }
+        public static UIManager UI { get; private set; }
 
         public static GameEntry Instance { get; private set; }
 
         private void Awake() {
             Instance = this;
             CurLanguage = m_CurrLanguage;
+            UIRootRectTransform = UIRootCanvasScaler.GetComponent<RectTransform>();
         }
 
         /// <summary>
@@ -55,6 +70,7 @@ namespace SpriteFramework
             Fsm = new FsmManager();
             Procedure = new ProcedureManager();
             Socket = new SocketManager();
+            UI = new UIManager();
 
             //在Init中, 模块之间可互相调用
             Audio.Init();
@@ -79,6 +95,8 @@ namespace SpriteFramework
             Pool.OnUpdate();
             Procedure.OnUpdate();
             Socket.OnUpdate();
+            UI.OnUpdate();
+            Scene.OnUpdate();
         }
 
         private IEnumerator TestGame() {
@@ -168,6 +186,7 @@ namespace SpriteFramework
             Pool.Dispose();
             Fsm.Dispose();
             Socket.Dispose();
+            UI.Dispose();
         }
 
     }

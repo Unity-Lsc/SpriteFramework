@@ -68,7 +68,8 @@ namespace SpriteMain
         /// 框架初始化
         /// </summary>
         IEnumerator InitFramework() {
-            gameObject.AddComponent<GameEntry>().Init();
+            var obj = Resources.Load<GameObject>("GameEntry");
+            Instantiate(obj, transform).GetComponent<GameEntry>().Init();
             yield break;
         }
 

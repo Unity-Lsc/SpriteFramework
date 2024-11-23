@@ -40,6 +40,11 @@ namespace SpriteFramework
         public const string CharactorPrefabRoot = "Assets/Game/AssetsPackage/Prefab/Charactor/";
 
         /// <summary>
+        /// UI窗体的根路径
+        /// </summary>
+        public const string UIPrefabRoot = "Assets/Game/AssetsPackage/Prefab/UI/";
+
+        /// <summary>
         /// 场景的根路径
         /// </summary>
         public const string SceneRoot = "Assets/Game/AssetsPackage/Scenes/";

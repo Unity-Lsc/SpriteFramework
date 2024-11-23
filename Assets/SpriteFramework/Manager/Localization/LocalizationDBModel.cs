@@ -19,7 +19,7 @@ namespace SpriteFramework
         /// <summary>
         /// 当前语言字典
         /// </summary>
-        public Dictionary<string, string> LocalizationDict = new Dictionary<string, string>();
+        public Dictionary<string, string> LocalizationDict = new();
 
         /// <summary>
         /// 加载列表

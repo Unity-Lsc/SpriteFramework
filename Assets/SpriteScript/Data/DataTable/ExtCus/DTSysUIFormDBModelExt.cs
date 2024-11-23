@@ -5,38 +5,38 @@ namespace SpriteFramework
     public partial class DTSysUIFormDBModel
     {
 
-        public Dictionary<string, DTSysUIFormEntity> NameByDic;
+        public Dictionary<string, DTSysUIFormEntity> NameByDict;
 
         protected override void OnLoadListComple() {
             base.OnLoadListComple();
-            NameByDic = new Dictionary<string, DTSysUIFormEntity>();
+            NameByDict = new Dictionary<string, DTSysUIFormEntity>();
             for (int i = 0; i < m_List.Count; i++) {
                 DTSysUIFormEntity entity = m_List[i];
 
                 switch (GameEntry.CurLanguage) {
                     case SpriteLanguage.Chinese:
-                        entity.AssetFullPath = entity.AssetPath_Chinese;
+                        entity.AssetFullPath = SFConstDefine.UIPrefabRoot + entity.AssetPath_Chinese;
                         break;
                     case SpriteLanguage.English:
-                        entity.AssetFullPath = string.IsNullOrWhiteSpace(entity.AssetPath_English) ? entity.AssetPath_Chinese : entity.AssetPath_English;
+                        entity.AssetFullPath = SFConstDefine.UIPrefabRoot + (string.IsNullOrWhiteSpace(entity.AssetPath_English) ? entity.AssetPath_Chinese : entity.AssetPath_English);
                         break;
                 }
                 string[] strs = entity.AssetFullPath.Split('.')[0].Split('/');
                 if (strs.Length >= 1) {
                     string str = strs[strs.Length - 1];
-                    if (NameByDic.ContainsKey(str)) {
+                    if (NameByDict.ContainsKey(str)) {
                         GameEntry.LogError("名称:{0} 有重复============", str);
                     } else {
                         entity.UIFromName = str;
-                        NameByDic.Add(str, entity);
+                        NameByDict.Add(str, entity);
                     }
                 }
             }
         }
 
         public DTSysUIFormEntity GetEntity(string name) {
-            if (NameByDic.ContainsKey(name)) {
-                return NameByDic[name];
+            if (NameByDict.ContainsKey(name)) {
+                return NameByDict[name];
             }
             GameEntry.LogError("没有找到资源,Name:{0}", name);
             return null;

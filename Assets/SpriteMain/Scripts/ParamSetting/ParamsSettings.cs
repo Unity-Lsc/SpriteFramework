@@ -80,15 +80,15 @@ public class ParamsSettings : ScriptableObject
     public int PoolReleaseClassObjectInterval = 30;
 
     /// <summary>
-    /// UI界面池_回池后过期时间_秒
+    /// UI界面池,回池后过期时间(秒)
     /// </summary>
-    [Tooltip("UI界面池_回池后过期时间_秒")]
+    [Tooltip("UI界面池 回池后过期时间(秒)")]
     public int UIExpire = 30;
 
     /// <summary>
-    /// UI界面池_释放间隔_秒
+    /// UI界面池 释放间隔(秒)
     /// </summary>
-    [Tooltip("UI界面池_释放间隔_秒")]
+    [Tooltip("UI界面池 释放间隔(秒)")]
     public int UIClearInterval = 30;
 
     #endregion 系统参数end

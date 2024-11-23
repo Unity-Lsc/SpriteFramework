@@ -1,4 +1,6 @@
 using UnityEngine;
+using SpriteFramework;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Unity相关的工具类
@@ -58,6 +60,43 @@ public class UnityUtils
         }
 
         return value;
+    }
+
+    /// <summary>
+    /// 获取路径的最后名称
+    /// </summary>
+    public static string GetLastPathName(string path) {
+        if (path.IndexOf('/') == -1) {
+            return path;
+        }
+        return path.Substring(path.LastIndexOf('/') + 1);
+    }
+
+    /// <summary>
+    /// 加载Prefab并克隆
+    /// </summary>
+    /// <param name="prefabFullPath">Prefab的资源路径</param>
+    /// <param name="parent">父节点</param>
+    public static GameObject LoadPrefabClone(string prefabFullPath, Transform parent = null) {
+        var prefab = GameEntry.Resource.LoadAsset<GameObject>(prefabFullPath);
+        if(prefab != null) {
+            return Object.Instantiate(prefab, parent);
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 异步加载Prefab并克隆
+    /// </summary>
+    /// <param name="prefabFullPath">Prefab的资源路径</param>
+    /// <param name="parent">父节点</param>
+    public static async Task<GameObject> LoadPrefabCloneAsync(string prefabFullPath, Transform parent = null) {
+        var handler = GameEntry.Resource.LoadAssetAsync<GameObject>(prefabFullPath);
+        await handler.Task;
+        var prefab = handler.AssetObject as GameObject;
+        if (prefab != null)
+            return Object.Instantiate(prefab);
+        return null;
     }
 
 }

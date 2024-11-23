@@ -74,3 +74,16 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: Charactor
         UserData: 
+    - GroupName: UIForm
+      GroupDesc: "\uFF08UI\u7A97\u4F53\uFF09"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Game/AssetsPackage/Prefab/UI
+        CollectorGUID: cde27520c59770e49b324d227becc637
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

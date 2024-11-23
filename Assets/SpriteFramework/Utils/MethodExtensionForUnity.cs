@@ -45,10 +45,10 @@ public static class MethodExtensionForUnity
     public static async void AutoLoadTexture(this Image img, string imgPath, bool isSetNativeSize = false) {
         var handler = GameEntry.Resource.LoadAssetAsync<Object>(imgPath);
         await handler.Task;
-        Sprite obj = null;
         var asset = handler.AssetObject;
-        if(asset is Sprite) {
-            obj = (Sprite)asset;
+        Sprite obj;
+        if (asset is Sprite sprite) {
+            obj = sprite;
         } else {
             Texture2D texture = (Texture2D)asset;
             obj = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
