@@ -9,7 +9,7 @@ namespace SpriteMain
     /// <summary>
     /// 热更新管理器
     /// </summary>
-    public class YooAssetHotUpdate : Singleton<YooAssetHotUpdate>
+    public class PatchManager : Singleton<PatchManager>
     {
 
         /// <summary>
@@ -41,6 +41,7 @@ namespace SpriteMain
         /// 开始资源热更新流程
         /// </summary>
         public IEnumerator GameHotUpdate() {
+            LoadPatchWindow();
             yield return InitPackage();
             yield return GetPackageVersion();
             yield return UpdateManifest();
@@ -49,6 +50,14 @@ namespace SpriteMain
         }
 
         #region 热更新流程
+
+        /// <summary>
+        /// 加载更新面板
+        /// </summary>
+        private void LoadPatchWindow() {
+            //var go = Resources.Load<GameObject>("PatchWindow");
+            //GameObject.Instantiate(go);
+        }
 
         /// <summary>
         /// 初始化资源包

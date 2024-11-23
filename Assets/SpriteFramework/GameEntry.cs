@@ -28,6 +28,7 @@ namespace SpriteFramework
         public static LocalizationManager Localization { get; private set; }
         public static FsmManager Fsm { get; private set; }
         public static ProcedureManager Procedure { get; private set; }
+        public static SocketManager Socket { get; private set; }
 
         public static GameEntry Instance { get; private set; }
 
@@ -53,6 +54,7 @@ namespace SpriteFramework
             Localization = new LocalizationManager();
             Fsm = new FsmManager();
             Procedure = new ProcedureManager();
+            Socket = new SocketManager();
 
             //在Init中, 模块之间可互相调用
             Audio.Init();
@@ -76,6 +78,7 @@ namespace SpriteFramework
             Audio.OnUpdate();
             Pool.OnUpdate();
             Procedure.OnUpdate();
+            Socket.OnUpdate();
         }
 
         private IEnumerator TestGame() {
@@ -164,6 +167,7 @@ namespace SpriteFramework
             DataTable.Dispose();
             Pool.Dispose();
             Fsm.Dispose();
+            Socket.Dispose();
         }
 
     }

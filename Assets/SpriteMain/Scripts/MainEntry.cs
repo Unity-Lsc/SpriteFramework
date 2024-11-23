@@ -60,8 +60,8 @@ namespace SpriteMain
         /// 检查热更新
         /// </summary>
         IEnumerator CheckHotUpdate() {
-            YooAssetHotUpdate.Instance.Init(PlayMode, RemoteURL);
-            yield return YooAssetHotUpdate.Instance.GameHotUpdate();
+            PatchManager.Instance.Init(PlayMode, RemoteURL);
+            yield return PatchManager.Instance.GameHotUpdate();
         }
 
         /// <summary>

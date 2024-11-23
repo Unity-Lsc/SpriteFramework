@@ -52,6 +52,24 @@ public class ParamsSettings : ScriptableObject
 
     [Space(10)]
 
+    [Header("Socket请求相关")]
+    #region Socket请求相关
+
+    [Tooltip("服务器地址")]
+    /// <summary>
+    /// 服务器地址
+    /// </summary>
+    public string ServerIp;
+
+    [Tooltip("服务器端口")]
+    /// <summary>
+    /// 服务器端口
+    /// </summary>
+    public int Port;
+
+    #endregion
+
+
     [Header("系统参数")]
     #region 系统参数
 

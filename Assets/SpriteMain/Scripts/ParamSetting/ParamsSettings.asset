@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WebAccountUrl: 
   TestWebAccountUrl: 
+  HttpRetry: 3
+  HttpRetryInterval: 3
   IsTest: 0
   PostIsEncrypt: 0
   PostContentType: 
-  HttpRetry: 3
-  HttpRetryInterval: 3
+  ServerIp: '"127.0.0.1"'
+  Port: 6080
   PoolReleaseClassObjectInterval: 30
-  PoolReleaseAssetInterval: 60
   UIExpire: 30
   UIClearInterval: 30
   MobileDebug: 0
