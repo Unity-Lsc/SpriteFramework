@@ -85,7 +85,7 @@ namespace SpriteFramework
         private void EnterGame() {
             Log("进入游戏");
             Procedure.ChangeState(ProcedureState.Launch);
-            StartCoroutine(TestGame());
+            //StartCoroutine(TestGame());
         }
 
         private void Update() {
@@ -99,24 +99,12 @@ namespace SpriteFramework
             Scene.OnUpdate();
         }
 
-        private IEnumerator TestGame() {
-            //测试同步加载数据表
-            DataTable.LoadDataTable();
-            //var entity = DataTable.DTRechargeShopDBModel.GetDict(1001);
-            //Log("开始打印数据表");
-            //Log(entity.Name);
-            //end
+        //private IEnumerator TestGame() {
 
-            //测试异步加载资源
-            //var handle = Resource.LoadDataTableAsync("fragment");
-            //yield return handle;
-            //t = handle.AssetObject as TextAsset;
-            //handle.Dispose();
-            //Debug.Log(t.text);
-            //end
-
-            yield return Scene.LoadScene("Main");
-        }
+        //    yield return Scene.LoadScene("Main", ()=> {
+        //        UI.OpenUIForm<UIMainCityForm>();
+        //    });
+        //}
 
         #region 打印日志
 

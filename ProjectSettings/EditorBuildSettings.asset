@@ -11,5 +11,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Game/AssetsPackage/Scenes/Main.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Game/AssetsPackage/Scenes/TestAudio.unity
+    guid: a464eb5d68b1dbe4d801ec404f50e7c6
+  - enabled: 1
+    path: Assets/Game/AssetsPackage/Scenes/TestDataTable.unity
+    guid: 77585fb57f253d148929963399351f0d
+  - enabled: 1
+    path: Assets/Game/AssetsPackage/Scenes/TestEvent.unity
+    guid: 821dd5a8367c2c04aa73e1a9a41ae00f
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

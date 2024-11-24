@@ -1,5 +1,6 @@
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using YooAsset;
 
 namespace SpriteFramework
@@ -52,18 +53,19 @@ namespace SpriteFramework
             }
             return assetObj;
         }
-
-        /// <summary>
+        
         /// 异步加载场景
         /// </summary>
         /// <param name="scenePath">场景路径</param>
-        public SceneOperationHandle LoadSceneAsync(string scenePath, string packageName = null) {
+        /// <param name="loadMode">场景的加载模式（单一模式还是多场景叠加模式）</param>
+        /// <returns></returns>
+        public SceneOperationHandle LoadSceneAsync(string scenePath, LoadSceneMode loadMode = LoadSceneMode.Single, string packageName = null) {
             packageName ??= SFConstDefine.DefaultPackageName;
             var package = YooAssets.TryGetPackage(packageName);
             if(package == null) {
                 return null;
             }
-            return package.LoadSceneAsync(scenePath);
+            return package.LoadSceneAsync(scenePath, loadMode);
         }
 
         #region 封装的具体加载资源的方法
