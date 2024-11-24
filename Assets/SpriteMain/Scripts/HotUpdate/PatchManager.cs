@@ -63,7 +63,7 @@ namespace SpriteMain
         /// 初始化资源包
         /// </summary>
         private IEnumerator InitPackage() {
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(0.5f);
 
             var playMode = mPlayMode;
 

@@ -1,0 +1,99 @@
+print('这里是Main lua 脚本');
+
+local myTable = {};
+function myTable:Test(a, b)
+	print("myTable:Test", self);
+	print(a,b);
+end
+
+myTable:Test(10,20);
+print("=========================")
+myTable.Test(myTable,10,20);
+
+print("===========元表==============")
+local a = {
+	name = "lisichao"
+}
+local meta_a = {
+	__index = {
+		name = "lsc",
+		age = 18,
+	},
+}
+setmetatable(a, meta_a);
+print(a.name)
+
+print("===========面向对象==============")
+local base = {}
+function base:Test()
+	print("base:Test")
+end
+
+function base:New(instance)
+	if not instance then
+		instance = {}
+	end
+	setmetatable(instance, {__index = self});
+	return instance;
+end
+
+local child = base:New()
+child:Test();
+
+print("===========YouYou面向对象==============")
+local YouYou= {Id=0,Name=""}
+--YouYou.__index= YouYou
+
+function YouYou.New(Id,Name)
+	local instance = {}
+	setmetatable(instance, { __index = YouYou })
+
+	instance.Id = Id
+	instance.Name = Name
+	return instance;
+end
+
+function YouYou.GetName()
+	print("YouYou.GetName");
+end
+
+local childYouYou = YouYou.New(10,"yyp");
+print(childYouYou.Id, childYouYou.Name);
+childYouYou.GetName();
+
+print("===========Person基类==============")
+
+local Person = {Name = "", Age = 0}
+
+Person.Name = "Person";
+
+function Person:New(name, age)
+	local ins = {}
+	setmetatable(ins, {__index = self})
+	self.Name = name
+	self.Age = age
+	return ins;
+end
+
+function Person:GetName()
+	print("Person:GetName", self.Name)
+end
+
+function Person:GetAge()
+	print("Person:GetAge", self.Age)
+end
+
+local Woman = Person:New();
+function Woman:Test()
+	print("Woman.Test");
+end
+function Woman:GetName()
+	Person.GetName(self);
+	print("Woman:GetName", self.Name)
+end
+
+local yyp = Woman:New("YaoYaping", 29)
+
+yyp:GetName()
+yyp:Test();
+yyp:GetAge();

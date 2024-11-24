@@ -1,0 +1,17 @@
+function MathAbs(num)
+	if num < 0 then
+		return -num;
+	end
+	return num;
+end
+
+local retNum = MathAbs(-88);
+print(retNum);
+
+local function LocalTest()
+	print("这里是Local的Test");
+end
+
+print("===============GameRoot===============");
+
+return "GameRoot bytes";

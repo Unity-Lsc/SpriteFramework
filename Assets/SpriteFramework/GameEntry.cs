@@ -43,6 +43,7 @@ namespace SpriteFramework
         public static ProcedureManager Procedure { get; private set; }
         public static SocketManager Socket { get; private set; }
         public static UIManager UI { get; private set; }
+        public static LuaManager Lua { get; private set; }
 
         public static GameEntry Instance { get; private set; }
 
@@ -71,6 +72,7 @@ namespace SpriteFramework
             Procedure = new ProcedureManager();
             Socket = new SocketManager();
             UI = new UIManager();
+            Lua = new LuaManager();
 
             //在Init中, 模块之间可互相调用
             Audio.Init();

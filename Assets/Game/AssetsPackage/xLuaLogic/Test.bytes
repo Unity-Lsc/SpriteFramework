@@ -1,0 +1,4 @@
+print("Test Lua")
+
+local ret = MathAbs(-100);
+print(ret);

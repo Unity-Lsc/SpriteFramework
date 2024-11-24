@@ -60,9 +60,9 @@ namespace SpriteFramework
                 return;
             }
 
+            m_CurProgress = 0;
             m_CurrSceneIsLoading = true;
             m_SceneName = sceneName;
-
 
             //显示Loading界面
             GameEntry.UI.OpenUIForm<UILoadingForm>();
@@ -93,8 +93,6 @@ namespace SpriteFramework
                 GameEntry.Log("场景:{0} 加载完毕!", m_SceneName);
                 OnLoadingUpdateCallback?.Invoke(m_CurProgress);
                 m_CurrSceneIsLoading = false;
-                m_CurProgress = 0;
-                m_TargetProgress = 0;
                 m_OnComplete?.Invoke();
             }
         }
