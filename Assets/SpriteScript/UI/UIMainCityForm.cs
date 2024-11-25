@@ -5,14 +5,18 @@ using UnityEngine.UI;
 public partial class UIMainCityForm : UIFormBase
 {
 
-    [SerializeField] private RectTransform m_Trans;
+    private RectTransform _trans;
 
     protected override void Awake() {
         base.Awake();
+        _trans = transform.Find("Trans_BtnGroup").GetComponent<RectTransform>();
+    }
 
-        foreach (Transform child in m_Trans) {
+    protected override void Start() {
+        base.Start();
+        foreach (Transform child in _trans) {
             Button btn = child.GetComponent<Button>();
-            if(btn != null) {
+            if (btn != null) {
                 btn.onClick.AddListener(() => {
                     GameEntry.UI.CloseAllDefaultUIForm();
                     GameEntry.Scene.LoadSceneAsync(btn.GetComponentInChildren<Text>().text, () => {
@@ -22,7 +26,6 @@ public partial class UIMainCityForm : UIFormBase
                 });
             }
         }
-
     }
 
 }

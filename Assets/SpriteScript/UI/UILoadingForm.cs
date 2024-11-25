@@ -9,12 +9,18 @@ using System;
 public partial class UILoadingForm : UIFormBase
 {
 
-    [SerializeField] private Scrollbar m_ScrollBar;
-    [SerializeField] private Text m_TxtTip;
+    [SerializeField] private Scrollbar _scrollBar;
+    [SerializeField] private Text _txtTip;
+
+    protected override void Awake() {
+        base.Awake();
+        _scrollBar = transform.Find("Scrollbar").GetComponent<Scrollbar>();
+        _txtTip = transform.Find("txtTip").GetComponent<Text>();
+    }
 
     private void OnLoadingProgressChange(float progress) {
-        m_TxtTip.text = string.Format("正在进入场景, 加载进度 {0}%", Math.Floor(progress * 100));
-        m_ScrollBar.size = progress;
+        _txtTip.text = string.Format("正在进入场景, 加载进度 {0}%", Math.Floor(progress * 100));
+        _scrollBar.size = progress;
         if(progress >= 1) {
             Close();
         }

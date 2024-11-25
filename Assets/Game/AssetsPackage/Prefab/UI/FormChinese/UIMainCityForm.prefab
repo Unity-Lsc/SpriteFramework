@@ -2055,7 +2055,6 @@ GameObject:
   - component: {fileID: 330688274319141217}
   - component: {fileID: 8402190076618190680}
   - component: {fileID: 6753542943651559902}
-  - component: {fileID: 5609063175461613736}
   m_Layer: 5
   m_Name: UIMainCityForm
   m_TagString: Untagged
@@ -2161,19 +2160,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5609063175461613736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6106147342399757752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19fde4888f1ad994485479da5671c71d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Trans: {fileID: 3582824631056743668}
 --- !u!1 &6190263828491345509
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,11 +7,16 @@ using UnityEngine.UI;
 public partial class UIRegForm : UIFormBase
 {
 
-    [SerializeField] private Button m_BtnBack;
+    [SerializeField] private Button _btnBack;
 
     protected override void Awake() {
         base.Awake();
-        m_BtnBack.onClick.AddListener(() => {
+        _btnBack = transform.Find("btnBack").GetComponent<Button>();
+    }
+
+    protected override void Start() {
+        base.Start();
+        _btnBack.onClick.AddListener(() => {
             GameEntry.Scene.LoadSceneAsync("Main", () => {
                 GameEntry.UI.OpenUIForm<UIMainCityForm>();
             });

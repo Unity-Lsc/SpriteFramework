@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1295706406470594313}
   - component: {fileID: 1362493094557177597}
   - component: {fileID: 5492119662601136404}
-  - component: {fileID: 2026457290094167535}
   m_Layer: 5
   m_Name: UIRegForm
   m_TagString: Untagged
@@ -119,19 +118,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2026457290094167535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 759112107756265652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18eaa8197f2953f42a89dd0e43664052, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BtnBack: {fileID: 6199093009123496101}
 --- !u!1 &774300885164674432
 GameObject:
   m_ObjectHideFlags: 0

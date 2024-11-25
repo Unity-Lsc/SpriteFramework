@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -14,7 +14,7 @@ namespace YooAsset.Editor
 		public static string GetDefaultBuildOutputRoot()
 		{
 			string projectPath = EditorTools.GetProjectPath();
-			return $"{projectPath}/Bundles";
+			return $"{projectPath}/AssetBundles";
 		}
 
 		/// <summary>

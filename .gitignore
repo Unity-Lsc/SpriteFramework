@@ -74,7 +74,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # AssetBundle directory
-Bundles/
+AssetBundles/
 
 # Idea directory
 *.idea

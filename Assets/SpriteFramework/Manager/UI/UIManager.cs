@@ -85,7 +85,49 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="CheckReverseChange">是否检查窗体的反切</param>
         public T OpenUIForm<T>(bool CheckReverseChange = true) where T : UIFormBase {
-            return OpenUIForm(typeof(T).Name, CheckReverseChange) as T;
+            return OnOpenUIForm<T>(CheckReverseChange);
+        }
+
+        /// <summary>
+        /// 打开UI窗体(泛型)
+        /// </summary>
+        /// <param name="CheckReverseChange">是否检查窗体的反切</param>
+        private T OnOpenUIForm<T>(bool CheckReverseChange = true) where T : UIFormBase {
+            var entity = GameEntry.DataTable.DTSysUIFormDBModel.GetEntity(typeof(T).Name);
+            if (entity == null) return null;
+            if (!entity.CanMulit && IsOpened(entity.Id)) {
+                GameEntry.LogError("不重复打开同一个UI窗体  ID:{0} Path:{0}", entity.Id, entity.AssetFullPath);
+                return null;
+            }
+            if (CheckReverseChange && (UIFormShowMode)entity.ShowMode == UIFormShowMode.Reverse) {
+                //检查反切，在打开下一个界面前，关闭当前界面
+                if (m_ReverseFormList.Count > 0) {
+                    CloseUIForm(m_ReverseFormList.Last.Value, false);
+                }
+                //把窗体加入到反切列表里面
+                m_ReverseFormList.AddLast(entity.UIFromName);
+            }
+
+            //先从对象池中取
+            UIFormBase formBase = m_UIPool.Dequeue(entity.Id);
+            if (formBase != null) {
+                m_OpenUIFormList.AddLast(formBase);
+                SetSortingOrder(formBase, true);
+                return formBase as T;
+            }
+
+            //对象池中没有，克隆新的
+            GameObject obj = UnityUtils.LoadPrefabClone(entity.AssetFullPath, GetUIGroup(entity.UIGroupId).Tran);
+            formBase = obj.GetComponent<UIFormBase>();
+            if (formBase == null) {
+                GameEntry.Log("该UI界面:{0} 没有挂载UIFormBase脚本", obj.name);
+                formBase = obj.AddComponent<T>();
+            }
+            formBase.Init(entity);
+
+            m_OpenUIFormList.AddLast(formBase);
+            SetSortingOrder(formBase, true);
+            return formBase as T;
         }
 
         /// <summary>
@@ -93,7 +135,7 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="formName">UI窗体的名字</param>
         /// <param name="CheckReverseChange">是否检查窗体的反切</param>
-        private UIFormBase OpenUIForm(string formName, bool CheckReverseChange = true) {
+        private UIFormBase OnOpenUIForm(string formName, bool CheckReverseChange = true) {
             var entity = GameEntry.DataTable.DTSysUIFormDBModel.GetEntity(formName);
             if (entity == null) return null;
             if(!entity.CanMulit && IsOpened(entity.Id)) {
@@ -160,7 +202,7 @@ namespace SpriteFramework
 
                 //检查反切，在关闭当前界面后，打开上一个界面
                 if(m_ReverseFormList.Count > 0) {
-                    var preForm = OpenUIForm(m_ReverseFormList.Last.Value, false);
+                    var preForm = OnOpenUIForm(m_ReverseFormList.Last.Value, false);
                     if(preForm.OnBack != null) {
                         Action onBack = preForm.OnBack;
                         preForm.OnBack = null;
