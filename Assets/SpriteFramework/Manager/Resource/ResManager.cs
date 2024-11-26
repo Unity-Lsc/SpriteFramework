@@ -24,7 +24,7 @@ namespace SpriteFramework
             if(package == null) {
                 return null;
             }
-
+            
             return package.LoadAssetAsync<T>(assetPath); 
         }
 
@@ -32,7 +32,7 @@ namespace SpriteFramework
         /// 同步加载资源
         /// </summary>
         /// <param name="assetPath">资源路径</param>
-        public T LoadAsset<T>(string assetPath, string packageName = null) where T : UnityEngine.Object {
+        public T LoadAsset<T>(string assetPath, string packageName = null) where T : Object {
             T assetObj = null;
             AssetOperationHandle handle;
 
@@ -100,6 +100,16 @@ namespace SpriteFramework
             return LoadAsset<AudioClip>(soundPath, packageName);
         }
 
+        /// <summary>
+        /// 同步加载Lua脚本文件
+        /// </summary>
+        /// <param name="luaName">Lua的文件名（xLuaLogic下的路径）</param>
+        /// <returns></returns>
+        public TextAsset LoadLua(string luaName, string packageName = null) {
+            string luaPath = SFConstDefine.LuaScriptRoot + luaName;
+            return LoadAsset<TextAsset>(luaPath, packageName);
+        }
+
         #endregion 封装的具体加载资源的方法end
 
         /// <summary>
@@ -113,5 +123,17 @@ namespace SpriteFramework
             }
             package.UnloadUnusedAssets();
         }
+
+        /// <summary>
+        /// 获取路径的最后名称
+        /// </summary>
+        /// <param name="path"></param>
+        public string GetLastPathName(string path) {
+            if (path.IndexOf('/') == -1) {
+                return path;
+            }
+            return path.Substring(path.LastIndexOf('/') + 1);
+        }
+
     }
 }

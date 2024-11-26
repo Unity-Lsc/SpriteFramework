@@ -66,7 +66,25 @@ namespace SpriteFramework
         }
 
         public void Dispose() {
+            LocalizationDBModel.Clear();
+
+            DTEquipDBModel.Clear();
+            DTItemDBModel.Clear();
+            DTMaterialsDBModel.Clear();
             DTRechargeShopDBModel.Clear();
+            DTShopCategoryDBModel.Clear();
+            DTShopDBModel.Clear();
+            DTSysAudioDBModel.Clear();
+            DTSysCodeDBModel.Clear();
+            DTSysCommonEventIdDBModel.Clear();
+            DTSysConfigDBModel.Clear();
+            DTSysEffectDBModel.Clear();
+            DTSysPrefabDBModel.Clear();
+            DTSysSceneDBModel.Clear();
+            DTSysSceneDetailDBModel.Clear();
+            DTSysStorySoundDBModel.Clear();
+            DTSysUIFormDBModel.Clear();
+            DTTaskDBModel.Clear();
         }
 
     }

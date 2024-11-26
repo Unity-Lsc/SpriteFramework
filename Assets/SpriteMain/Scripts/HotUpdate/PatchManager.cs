@@ -87,7 +87,8 @@ namespace SpriteMain
             //单机运行模式
             if (playMode == EPlayMode.OfflinePlayMode) {
                 var createParameters = new OfflinePlayModeParameters {
-                    DecryptionServices = new GameDecryptionServices()
+                    DecryptionServices = new GameDecryptionServices(),
+                    BuildinRootDirectory = Application.streamingAssetsPath
                 };
                 initializationOperation = package.InitializeAsync(createParameters);
             }

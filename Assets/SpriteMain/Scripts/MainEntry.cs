@@ -11,6 +11,8 @@ namespace SpriteMain
     public class MainEntry : MonoBehaviour
     {
 
+        public static MainEntry Instance { get; private set; }
+
         /// <summary>
         /// 资源系统运行模式
         /// </summary>
@@ -26,6 +28,7 @@ namespace SpriteMain
         public static ParamsSettings ParamsSettings { get; private set; }
 
         private void Awake() {
+            Instance = this;
             DontDestroyOnLoad(gameObject);
 
             Application.targetFrameRate = 60;

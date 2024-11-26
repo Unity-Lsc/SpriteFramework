@@ -1,0 +1,28 @@
+UILoadingForm = {};
+local this = UILoadingForm;
+
+local _scrollBar;
+local _txtTip;
+local _luaForm;
+
+function UILoadingForm.Awake(transform)
+	_luaForm = transform:GetComponent(typeof(CS.SpriteFramework.LuaForm));
+	_scrollBar = transform:Find("Scrollbar"):GetComponent("UnityEngine.UI.Scrollbar");
+	_txtTip = transform:Find("txtTip"):GetComponent("UnityEngine.UI.Text");
+end
+
+local function OnLoadingProgressChange(progress)
+	_txtTip.text = string.format("正在进入场景, 加载进度 %s", math.floor(progress * 100));
+	_scrollBar.size = progress;
+	if progress >= 1 then
+		_luaForm:Close();
+	end
+end
+
+function UILoadingForm.OnEnable()
+	GameEntry.Event:AddListener(SystemEventId.LoadingProgressChange, OnLoadingProgressChange);
+end
+
+function UILoadingForm.OnDisable()
+	GameEntry.Event:RemoveListener(SystemEventId.LoadingProgressChange, OnLoadingProgressChange);
+end

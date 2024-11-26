@@ -1,0 +1,11 @@
+print('启动GameRoot.lua');
+require('Common/Define')
+require 'Common/SystemEventId'
+
+GameRoot = {};
+local this = GameRoot;
+
+function GameRoot.Init()
+	print('GameRoot.Init');
+	require('Module/UILoadingForm');
+end

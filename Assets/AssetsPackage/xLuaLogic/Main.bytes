@@ -1,0 +1,4 @@
+print('启动Main.lua');
+
+require("GameRoot");
+GameRoot.Init();

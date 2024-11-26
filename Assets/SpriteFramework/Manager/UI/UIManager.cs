@@ -89,6 +89,14 @@ namespace SpriteFramework
         }
 
         /// <summary>
+        /// 打开UI窗体
+        /// </summary>
+        /// <param name="CheckReverseChange">是否检查窗体的反切</param>
+        public T OpenUIFormLua<T>(bool CheckReverseChange = true) where T : UIFormBase {
+            return OnOpenUIFormLua<T>(CheckReverseChange);
+        }
+
+        /// <summary>
         /// 打开UI窗体(泛型)
         /// </summary>
         /// <param name="CheckReverseChange">是否检查窗体的反切</param>
@@ -122,6 +130,48 @@ namespace SpriteFramework
             if (formBase == null) {
                 GameEntry.Log("该UI界面:{0} 没有挂载UIFormBase脚本", obj.name);
                 formBase = obj.AddComponent<T>();
+            }
+            formBase.Init(entity);
+
+            _openUIFormList.AddLast(formBase);
+            SetSortingOrder(formBase, true);
+            return formBase as T;
+        }
+
+        /// <summary>
+        /// 打开UI窗体(Lua)
+        /// </summary>
+        /// <param name="CheckReverseChange">是否检查窗体的反切</param>
+        private T OnOpenUIFormLua<T>(bool CheckReverseChange = true) where T : UIFormBase {
+            var entity = GameEntry.DataTable.DTSysUIFormDBModel.GetEntity(typeof(T).Name);
+            if (entity == null) return null;
+            if (!entity.CanMulit && IsOpened(entity.Id)) {
+                GameEntry.LogError("不重复打开同一个UI窗体  ID:{0} Path:{0}", entity.Id, entity.AssetFullPath);
+                return null;
+            }
+            if (CheckReverseChange && (UIFormShowMode)entity.ShowMode == UIFormShowMode.Reverse) {
+                //检查反切，在打开下一个界面前，关闭当前界面
+                if (_reverseFormList.Count > 0) {
+                    CloseUIForm(_reverseFormList.Last.Value, false);
+                }
+                //把窗体加入到反切列表里面
+                _reverseFormList.AddLast(entity.UIFromName);
+            }
+
+            //先从对象池中取
+            UIFormBase formBase = _uiPool.Dequeue(entity.Id);
+            if (formBase != null) {
+                _openUIFormList.AddLast(formBase);
+                SetSortingOrder(formBase, true);
+                return formBase as T;
+            }
+
+            //对象池中没有，克隆新的
+            GameObject obj = UnityUtils.LoadPrefabClone(entity.AssetFullPath, GetUIGroup(entity.UIGroupId).Tran);
+            formBase = obj.GetComponent<UIFormBase>();
+            if (formBase == null) {
+                GameEntry.Log("该UI界面:{0} 没有挂载LuaForm脚本", obj.name);
+                formBase = obj.AddComponent<LuaForm>();
             }
             formBase.Init(entity);
 

@@ -1,4 +1,4 @@
-print('这里是Main lua 脚本');
+print('这里是Test lua 脚本');
 
 local myTable = {};
 function myTable:Test(a, b)
@@ -92,7 +92,7 @@ function Woman:GetName()
 	print("Woman:GetName", self.Name)
 end
 
-local yyp = Woman:New("YaoYaping", 29)
+local yyp = Woman:New("YaoYaping", 39)
 
 yyp:GetName()
 yyp:Test();

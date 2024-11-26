@@ -65,7 +65,7 @@ namespace SpriteFramework
             _sceneName = sceneName;
 
             //显示Loading界面
-            GameEntry.UI.OpenUIForm<UILoadingForm>();
+            GameEntry.UI.OpenUIFormLua<UILoadingForm>();
             var handler = YooAssets.LoadSceneAsync(SFConstDefine.SceneRoot + sceneName, loadMode);
             GameEntry.Instance.StartCoroutine(TrackProgress(handler));
         }
@@ -87,11 +87,13 @@ namespace SpriteFramework
 
                 //防止进度超过100%，显示出现例如102%这种情况
                 _curProgress = Mathf.Min(_curProgress, _targetProgress);
-                OnLoadingUpdateCallback?.Invoke(_curProgress);
+                //OnLoadingUpdateCallback?.Invoke(_curProgress);
+                GameEntry.Event.Dispatch(SystemEventID.LoadingProgressChange, _curProgress);
             }
             if(_curProgress == 1 && Mathf.Abs(_curProgress - _targetProgress) < 0.001f) {
                 GameEntry.Log("场景:{0} 加载完毕!", _sceneName);
-                OnLoadingUpdateCallback?.Invoke(_curProgress);
+                //OnLoadingUpdateCallback?.Invoke(_curProgress);
+                GameEntry.Event.Dispatch(SystemEventID.LoadingProgressChange, _curProgress);
                 _isCurSceneLoading = false;
                 _onComplete?.Invoke();
             }

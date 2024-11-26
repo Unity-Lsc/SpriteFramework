@@ -27,7 +27,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Game/AssetsPackage/DataTable
+      - CollectPath: Assets/AssetsPackage/DataTable
         CollectorGUID: cbf64ac265c470d4385d01c1c798fd9f
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -40,7 +40,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Game/AssetsPackage/Scenes
+      - CollectPath: Assets/AssetsPackage/Scenes
         CollectorGUID: 77342a2b471c3c64eb549fd1eb23aedf
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -53,7 +53,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Game/AssetsPackage/Audio
+      - CollectPath: Assets/AssetsPackage/Audio
         CollectorGUID: ba30180716b23a64387b051161c706c3
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -66,7 +66,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Game/AssetsPackage/Prefab/Charactor
+      - CollectPath: Assets/AssetsPackage/Prefab/Charactor
         CollectorGUID: b9ae0aed6470a514cacd7ce586139274
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -79,8 +79,21 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Game/AssetsPackage/Prefab/UI
+      - CollectPath: Assets/AssetsPackage/Prefab/UI
         CollectorGUID: cde27520c59770e49b324d227becc637
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Lua
+      GroupDesc: "(Lua\u811A\u672C)"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetsPackage/xLuaLogic
+        CollectorGUID: 8a787c9512764c74693ad141d8371691
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory

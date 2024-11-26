@@ -28,7 +28,7 @@ namespace SpriteFramework.Editor
             //mList.Add(new MacorItem() { Name = "STAT_TD", DisplayName = "开启统计", IsDebug = false, IsRelease = true });
             //mList.Add(new MacorItem() { Name = "DEBUG_ROLESTATE", DisplayName = "调试角色状态", IsDebug = false, IsRelease = false });
             //mList.Add(new MacorItem() { Name = "DISABLE_ASSETBUNDLE", DisplayName = "禁用AssetBundle", IsDebug = false, IsRelease = false });
-            //mList.Add(new MacorItem() { Name = "HOTFIX_ENABLE", DisplayName = "开启热补丁", IsDebug = false, IsRelease = true });
+            _macorList.Add(new MacorItem() { Name = "HOTFIX_ENABLE", DisplayName = "开启热补丁", IsDebug = false, IsRelease = true });
             //mList.Add(new MacorItem() { Name = "ASSETBUNDLE_ENCRYPT", DisplayName = "AssetBundle加密", IsDebug = false, IsRelease = true });
             //mList.Add(new MacorItem() { Name = "SDKCHANNEL_APPLE_STORE", DisplayName = "渠道_苹果商店", IsDebug = false, IsRelease = false });
 
