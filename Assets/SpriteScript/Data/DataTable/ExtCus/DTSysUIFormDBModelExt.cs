@@ -10,8 +10,8 @@ namespace SpriteFramework
         protected override void OnLoadListComple() {
             base.OnLoadListComple();
             NameByDict = new Dictionary<string, DTSysUIFormEntity>();
-            for (int i = 0; i < m_List.Count; i++) {
-                DTSysUIFormEntity entity = m_List[i];
+            for (int i = 0; i < _entityList.Count; i++) {
+                DTSysUIFormEntity entity = _entityList[i];
 
                 switch (GameEntry.CurLanguage) {
                     case SpriteLanguage.Chinese:

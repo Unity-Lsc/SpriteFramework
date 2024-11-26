@@ -9,7 +9,7 @@ namespace SpriteFramework
         /// <summary>
         /// 变量对象池锁
         /// </summary>
-        private object m_VarObjectLock = new object();
+        private object _varObjectLock = new object();
 
         /// <summary>
         /// 取出一个变量对象
@@ -17,7 +17,7 @@ namespace SpriteFramework
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T DequeueVarObject<T>() where T : VariableBase, new() {
-            lock (m_VarObjectLock) {
+            lock (_varObjectLock) {
                 return GameEntry.Pool.ClassObjectPool.Dequeue<T>();
             }
         }
@@ -28,7 +28,7 @@ namespace SpriteFramework
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
         public void EnqueueVarObject<T>(T item) where T : VariableBase {
-            lock (m_VarObjectLock) {
+            lock (_varObjectLock) {
                 GameEntry.Pool.ClassObjectPool.Enqueue(item);
             }
         }

@@ -17,39 +17,39 @@ namespace SpriteFramework
         /// <summary>
         /// 已被取池的对象集合
         /// </summary>
-        private LinkedList<GameObject> m_SpawnedList;
+        private LinkedList<GameObject> _spawnedList;
 
         /// <summary>
         /// 在池内的对象
         /// </summary>
-        private LinkedList<GameObject> m_DespawnedList;
+        private LinkedList<GameObject> _despawnedList;
 
         /// <summary>
         /// 是否开启缓存池自动清理
         /// </summary>
-        private bool m_IsAutoClean;
+        private bool _isAutoClean;
 
         /// <summary>
         /// 对象池常驻数量(自动清理时,始终保留不清理的数量)
         /// </summary>
-        private int m_ResidentCount;
+        private int _residentCount;
 
         /// <summary>
         /// 自动清理的时间间隔
         /// </summary>
-        private int m_CleanInterval;
+        private int _cleanInterval;
 
         /// <summary>
         /// 每次自动清理的数量
         /// </summary>
-        private int m_PerCleanCount;
+        private int _perCleanCount;
 
         /// <summary>
         /// 定时清理协程是否正在运行中
         /// </summary>
-        private bool m_IsCleanActive = false;
+        private bool _isCleanActive = false;
 
-        private Transform m_Root;
+        private Transform _root;
 
         /// <summary>
         /// 当前对象的最大数量（包括在池内的, 已被取池的）
@@ -57,8 +57,8 @@ namespace SpriteFramework
         public int TotalCount {
             get {
                 int count = 0;
-                count += m_SpawnedList.Count;
-                count += m_DespawnedList.Count;
+                count += _spawnedList.Count;
+                count += _despawnedList.Count;
                 return count;
             }
         }
@@ -73,25 +73,25 @@ namespace SpriteFramework
         /// <param name="perCleanCount">对象池每次清理的数量</param>
         public PrefabPool(GameObject prefab, bool isAutoClean = true, int residentCount = 0, int cleanInterval = 10, int perCleanCount = 5) {
             this.Prefab = prefab;
-            this.m_IsAutoClean = isAutoClean;
-            this.m_ResidentCount = residentCount;
-            this.m_CleanInterval = cleanInterval;
-            this.m_PerCleanCount = perCleanCount;
+            this._isAutoClean = isAutoClean;
+            this._residentCount = residentCount;
+            this._cleanInterval = cleanInterval;
+            this._perCleanCount = perCleanCount;
 
-            m_DespawnedList = new LinkedList<GameObject>();
-            m_SpawnedList = new LinkedList<GameObject>();
+            _despawnedList = new LinkedList<GameObject>();
+            _spawnedList = new LinkedList<GameObject>();
         }
 
         public void PreloadPool(Transform root) {
-            m_Root = root;
+            _root = root;
             // 初始化填充对象池
-            if (m_ResidentCount > 0) {
-                for (int i = 0; i < m_ResidentCount; i++) {
+            if (_residentCount > 0) {
+                for (int i = 0; i < _residentCount; i++) {
                     //使用InstanceHandler，预加载克隆对象
                     GameObject obj = GameObject.Instantiate(Prefab);
                     obj.SetActive(false);
-                    obj.transform.SetParent(m_Root);
-                    m_DespawnedList.AddLast(obj);
+                    obj.transform.SetParent(_root);
+                    _despawnedList.AddLast(obj);
 #if UNITY_EDITOR
                     //对象名字后缀
                     obj.name += TotalCount.ToString("#000");
@@ -106,8 +106,8 @@ namespace SpriteFramework
         private GameObject CreateNewObject() {
             //使用InstanceHandler，克隆对象
             GameObject obj = GameObject.Instantiate(Prefab);
-            obj.transform.SetParent(m_Root);
-            m_SpawnedList.AddLast(obj);
+            obj.transform.SetParent(_root);
+            _spawnedList.AddLast(obj);
 #if UNITY_EDITOR
             //对象名字后缀
             obj.name += TotalCount.ToString("#000");
@@ -121,20 +121,20 @@ namespace SpriteFramework
         /// </summary>
         public GameObject DequeueObj() {
             GameObject obj;
-            if(m_DespawnedList.Count == 0) {
+            if(_despawnedList.Count == 0) {
                 //池中无可用对象，创建新对象
                 obj = CreateNewObject();
             } else {
                 //从池里拿对象
-                obj = m_DespawnedList.First.Value;
-                m_DespawnedList.RemoveFirst();
+                obj = _despawnedList.First.Value;
+                _despawnedList.RemoveFirst();
 
                 if (obj == null) {
                     GameEntry.Log("池内拿出来的对象是null， 被私自Destroy了, Prefab:{0}", LogCategory.Normal, Prefab.name);
                     return null;
                 }
 
-                m_SpawnedList.AddLast(obj);
+                _spawnedList.AddLast(obj);
                 obj.SetActive(true);
             }
             return obj;
@@ -144,13 +144,13 @@ namespace SpriteFramework
         /// 对象回池
         /// </summary>
         public bool EnqueueObj(GameObject obj) {
-            m_SpawnedList.Remove(obj);
-            m_DespawnedList.AddLast(obj);
+            _spawnedList.Remove(obj);
+            _despawnedList.AddLast(obj);
 
             obj.SetActive(false);
 
-            if (!m_IsCleanActive && m_IsAutoClean && TotalCount > m_ResidentCount) {
-                m_IsCleanActive = true;
+            if (!_isCleanActive && _isAutoClean && TotalCount > _residentCount) {
+                _isCleanActive = true;
                 GameEntry.Instance.StartCoroutine(CullDespawned());
             }
             return true;
@@ -160,20 +160,20 @@ namespace SpriteFramework
         /// 定时清理对象池的协程
         /// </summary>
         internal IEnumerator CullDespawned() {
-            while (TotalCount > m_ResidentCount) {
-                yield return new WaitForSeconds(m_CleanInterval);
+            while (TotalCount > _residentCount) {
+                yield return new WaitForSeconds(_cleanInterval);
                 //每次清理几个
-                for (int i = 0; i < m_PerCleanCount; i++) {
+                for (int i = 0; i < _perCleanCount; i++) {
                     //保留几个对象
-                    if (TotalCount <= m_ResidentCount) break;
-                    if (m_DespawnedList.Count == 0) break;
+                    if (TotalCount <= _residentCount) break;
+                    if (_despawnedList.Count == 0) break;
 
-                    GameObject obj = m_DespawnedList.Last.Value;
-                    m_DespawnedList.RemoveLast();
+                    GameObject obj = _despawnedList.Last.Value;
+                    _despawnedList.RemoveLast();
                     GameObject.Destroy(obj);
                 }
             }
-            m_IsCleanActive = false;
+            _isCleanActive = false;
             yield return null;
         }
 
@@ -181,7 +181,7 @@ namespace SpriteFramework
         /// 直接销毁某个物体
         /// </summary>
         public void Destroy(GameObject obj) {
-            bool isRemove = m_SpawnedList.Remove(obj);
+            bool isRemove = _spawnedList.Remove(obj);
             if (isRemove) {
                 GameEntry.LogError("对象:{0}不在池中", obj.name);
             }
@@ -193,14 +193,14 @@ namespace SpriteFramework
         /// </summary>
         internal void ClearPool() {
             List<GameObject> destroyList = new List<GameObject>();
-            foreach (GameObject inst in m_DespawnedList) {
+            foreach (GameObject inst in _despawnedList) {
                 destroyList.Add(inst);
             }
-            foreach (GameObject inst in m_SpawnedList) {
+            foreach (GameObject inst in _spawnedList) {
                 destroyList.Add(inst);
             }
-            m_DespawnedList.Clear();
-            m_SpawnedList.Clear();
+            _despawnedList.Clear();
+            _spawnedList.Clear();
 
             //先用destroyList装起来, 然后再销毁, 防止DestroyInstance内触发委托拿到的despawnedList.Count有问题
             foreach (GameObject inst in destroyList) {

@@ -32,8 +32,8 @@ namespace SpriteFramework
                 entity.Type = ms.ReadUTF8String();
                 entity.Value = ms.ReadUTF8String();
 
-                m_List.Add(entity);
-                m_Dic[entity.Id] = entity;
+                _entityList.Add(entity);
+                _entityDict[entity.Id] = entity;
             }
         }
     }

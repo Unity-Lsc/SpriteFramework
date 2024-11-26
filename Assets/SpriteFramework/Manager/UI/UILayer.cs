@@ -10,17 +10,17 @@ namespace SpriteFramework
         /// <summary>
         /// 存储UI层级的集合（key->UIGroupId，Value->UIGroup的层级）
         /// </summary>
-        private readonly Dictionary<byte, ushort> m_UILayerDict;
+        private readonly Dictionary<byte, ushort> _uiLayerDict;
 
         public UILayer() {
-            m_UILayerDict = new Dictionary<byte, ushort>();
+            _uiLayerDict = new Dictionary<byte, ushort>();
 
             //初始化基础排序
             var groups = GameEntry.Instance.UIGroups;
             if (groups != null && groups.Length > 0) {
                 for (int i = 0; i < groups.Length; i++) {
                     var group = groups[i];
-                    m_UILayerDict[group.Id] = group.BaseOrder;
+                    _uiLayerDict[group.Id] = group.BaseOrder;
                 }
             }
         }
@@ -32,11 +32,11 @@ namespace SpriteFramework
         /// <param name="isAdd">true:层级增加  false:层级减少</param>
         internal void SetSortingOrder(UIFormBase formBase, bool isAdd) {
             if (formBase.UIFormEntity.IsDisableUILayer == 1) return;
-            if (!m_UILayerDict.ContainsKey(formBase.UIFormEntity.UIGroupId)) return;
+            if (!_uiLayerDict.ContainsKey(formBase.UIFormEntity.UIGroupId)) return;
             if (isAdd) {
-                m_UILayerDict[formBase.UIFormEntity.UIGroupId] += 10;
+                _uiLayerDict[formBase.UIFormEntity.UIGroupId] += 10;
             } else {
-                m_UILayerDict[formBase.UIFormEntity.UIGroupId] -= 10;
+                _uiLayerDict[formBase.UIFormEntity.UIGroupId] -= 10;
             }
         }
 
@@ -45,11 +45,11 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="formBase">要获取层级的窗体</param>
         internal int GetCurSortingOrder(UIFormBase formBase) {
-            return m_UILayerDict[formBase.UIFormEntity.UIGroupId];
+            return _uiLayerDict[formBase.UIFormEntity.UIGroupId];
         }
 
         public void Dispose() {
-            m_UILayerDict.Clear();
+            _uiLayerDict.Clear();
         }
 
     }

@@ -35,8 +35,8 @@ namespace SpriteFramework
                 entity.Virtual = ms.ReadInt();
                 entity.Icon = ms.ReadUTF8String();
 
-                m_List.Add(entity);
-                m_Dic[entity.Id] = entity;
+                _entityList.Add(entity);
+                _entityDict[entity.Id] = entity;
             }
         }
     }

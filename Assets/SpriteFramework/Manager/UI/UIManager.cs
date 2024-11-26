@@ -26,18 +26,18 @@ namespace SpriteFramework
         /// <summary>
         /// 已经打开的UI窗体列表
         /// </summary>
-        private readonly LinkedList<UIFormBase> m_OpenUIFormList;
+        private readonly LinkedList<UIFormBase> _openUIFormList;
 
         /// <summary>
         /// 反切的UI窗体列表(string->窗体的名字)
         /// </summary>
-        private readonly LinkedList<string> m_ReverseFormList;
+        private readonly LinkedList<string> _reverseFormList;
 
-        private readonly Dictionary<byte, UIGroup> m_UIGroupDict;
+        private readonly Dictionary<byte, UIGroup> _uiGroupDict;
 
-        private readonly UILayer m_UILayer;
+        private readonly UILayer _uiLayer;
 
-        private readonly UIPool m_UIPool;
+        private readonly UIPool _uiPool;
 
         /// <summary>
         /// 标准分辨率比值
@@ -50,25 +50,25 @@ namespace SpriteFramework
         public float CurScreenRate { get; private set; }
 
         internal UIManager() {
-            m_OpenUIFormList = new LinkedList<UIFormBase>();
-            m_ReverseFormList = new LinkedList<string>();
-            m_UIGroupDict = new Dictionary<byte, UIGroup>();
+            _openUIFormList = new LinkedList<UIFormBase>();
+            _reverseFormList = new LinkedList<string>();
+            _uiGroupDict = new Dictionary<byte, UIGroup>();
 
-            m_UILayer = new UILayer();
-            m_UIPool = new UIPool();
+            _uiLayer = new UILayer();
+            _uiPool = new UIPool();
 
             StandardScreenRate = GameEntry.Instance.UIRootCanvasScaler.referenceResolution.x / GameEntry.Instance.UIRootCanvasScaler.referenceResolution.y;
             CurScreenRate = Screen.width / (float)Screen.height;
             var groups = GameEntry.Instance.UIGroups;
             for (int i = 0; i < groups.Length; i++) {
-                m_UIGroupDict[groups[i].Id] = groups[i];
+                _uiGroupDict[groups[i].Id] = groups[i];
             }
 
             ChangeCanvasRanderMode(RenderMode.ScreenSpaceOverlay);
         }
 
         internal void OnUpdate() {
-            m_UIPool.OnUpdate();
+            _uiPool.OnUpdate();
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="id">UI的分组编号</param>
         public UIGroup GetUIGroup(byte id) {
-            m_UIGroupDict.TryGetValue(id, out UIGroup group);
+            _uiGroupDict.TryGetValue(id, out UIGroup group);
             return group;
         }
 
@@ -101,17 +101,17 @@ namespace SpriteFramework
             }
             if (CheckReverseChange && (UIFormShowMode)entity.ShowMode == UIFormShowMode.Reverse) {
                 //检查反切，在打开下一个界面前，关闭当前界面
-                if (m_ReverseFormList.Count > 0) {
-                    CloseUIForm(m_ReverseFormList.Last.Value, false);
+                if (_reverseFormList.Count > 0) {
+                    CloseUIForm(_reverseFormList.Last.Value, false);
                 }
                 //把窗体加入到反切列表里面
-                m_ReverseFormList.AddLast(entity.UIFromName);
+                _reverseFormList.AddLast(entity.UIFromName);
             }
 
             //先从对象池中取
-            UIFormBase formBase = m_UIPool.Dequeue(entity.Id);
+            UIFormBase formBase = _uiPool.Dequeue(entity.Id);
             if (formBase != null) {
-                m_OpenUIFormList.AddLast(formBase);
+                _openUIFormList.AddLast(formBase);
                 SetSortingOrder(formBase, true);
                 return formBase as T;
             }
@@ -125,7 +125,7 @@ namespace SpriteFramework
             }
             formBase.Init(entity);
 
-            m_OpenUIFormList.AddLast(formBase);
+            _openUIFormList.AddLast(formBase);
             SetSortingOrder(formBase, true);
             return formBase as T;
         }
@@ -144,17 +144,17 @@ namespace SpriteFramework
             }
             if(CheckReverseChange && (UIFormShowMode)entity.ShowMode == UIFormShowMode.Reverse) {
                 //检查反切，在打开下一个界面前，关闭当前界面
-                if(m_ReverseFormList.Count > 0) {
-                    CloseUIForm(m_ReverseFormList.Last.Value, false);
+                if(_reverseFormList.Count > 0) {
+                    CloseUIForm(_reverseFormList.Last.Value, false);
                 }
                 //把窗体加入到反切列表里面
-                m_ReverseFormList.AddLast(entity.UIFromName);
+                _reverseFormList.AddLast(entity.UIFromName);
             }
 
             //先从对象池中取
-            UIFormBase formBase = m_UIPool.Dequeue(entity.Id);
+            UIFormBase formBase = _uiPool.Dequeue(entity.Id);
             if(formBase != null) {
-                m_OpenUIFormList.AddLast(formBase);
+                _openUIFormList.AddLast(formBase);
                 SetSortingOrder(formBase, true);
                 return formBase;
             }
@@ -168,7 +168,7 @@ namespace SpriteFramework
             }
             formBase.Init(entity);
 
-            m_OpenUIFormList.AddLast(formBase);
+            _openUIFormList.AddLast(formBase);
             SetSortingOrder(formBase, true);
             return formBase;
 
@@ -190,19 +190,19 @@ namespace SpriteFramework
         public void CloseUIForm(UIFormBase formBase, bool checkReverseChange = true) {
             if (!formBase.IsActive) return;
 
-            if (m_OpenUIFormList.Contains(formBase)) {
+            if (_openUIFormList.Contains(formBase)) {
                 SetSortingOrder(formBase, false);
-                m_OpenUIFormList.Remove(formBase);
-                m_UIPool.Enqueue(formBase);
+                _openUIFormList.Remove(formBase);
+                _uiPool.Enqueue(formBase);
             }
 
             if(checkReverseChange && (UIFormShowMode)formBase.UIFormEntity.ShowMode == UIFormShowMode.Reverse) {
                 //把当前界面从反切链表中移除
-                m_ReverseFormList.Remove(formBase.UIFormEntity.UIFromName);
+                _reverseFormList.Remove(formBase.UIFormEntity.UIFromName);
 
                 //检查反切，在关闭当前界面后，打开上一个界面
-                if(m_ReverseFormList.Count > 0) {
-                    var preForm = OnOpenUIForm(m_ReverseFormList.Last.Value, false);
+                if(_reverseFormList.Count > 0) {
+                    var preForm = OnOpenUIForm(_reverseFormList.Last.Value, false);
                     if(preForm.OnBack != null) {
                         Action onBack = preForm.OnBack;
                         preForm.OnBack = null;
@@ -218,7 +218,7 @@ namespace SpriteFramework
         /// <param name="uiFormName">要关闭的UI窗体名字</param>
         /// <param name="checkReverseChange">是否检查窗体的反切</param>
         private void CloseUIForm(string uiFormName, bool checkReverseChange = true) {
-            for(var curNode = m_OpenUIFormList.First; curNode != null; curNode = curNode.Next) {
+            for(var curNode = _openUIFormList.First; curNode != null; curNode = curNode.Next) {
                 if(curNode.Value.UIFormEntity.UIFromName == uiFormName) {
                     CloseUIForm(curNode.Value, checkReverseChange);
                     break;
@@ -230,10 +230,10 @@ namespace SpriteFramework
         /// 关闭所有"Default"组的UI窗口
         /// </summary>
         public void CloseAllDefaultUIForm() {
-            m_ReverseFormList.Clear();
+            _reverseFormList.Clear();
 
             List<UIFormBase> lst = new();
-            for (LinkedListNode<UIFormBase> curr = m_OpenUIFormList.Last; curr != null; curr = curr.Previous) {
+            for (LinkedListNode<UIFormBase> curr = _openUIFormList.Last; curr != null; curr = curr.Previous) {
                 lst.Add(curr.Value);
             }
             for (int i = 0; i < lst.Count; i++) {
@@ -249,14 +249,14 @@ namespace SpriteFramework
         /// <param name="uiFormName">要关闭的UI窗体名字</param>
         public void ForceCloseUIForm(string uiFormName) {
             int formId = GameEntry.DataTable.DTSysUIFormDBModel.GetEntity(uiFormName).Id;
-            for (var curNode = m_OpenUIFormList.First; curNode != null; curNode = curNode.Next) {
+            for (var curNode = _openUIFormList.First; curNode != null; curNode = curNode.Next) {
                 if(curNode.Value.UIFormEntity.Id == formId) {
                     ForceCloseUIForm(curNode.Value);
                     return;
                 }
             }
             //这里是为了防止，有的打开的UI窗体，没有添加到m_OpenUIFormList中
-            m_UIPool.Release(uiFormName);
+            _uiPool.Release(uiFormName);
         }
 
         /// <summary>
@@ -265,23 +265,23 @@ namespace SpriteFramework
         /// <param name="uiFormName">要关闭的UI窗体</param>
         public void ForceCloseUIForm(UIFormBase uIFormBase) {
             CloseUIForm(uIFormBase);
-            m_UIPool.Release(uIFormBase);
+            _uiPool.Release(uIFormBase);
         }
 
         /// <summary>
         /// 强制关闭所有UI窗体（从UI池中移除并销毁）
         /// </summary>
         public void ForceCloseAllUIForm() {
-            for (var curNode = m_OpenUIFormList.First; curNode != null;) {
+            for (var curNode = _openUIFormList.First; curNode != null;) {
                 var next = curNode.Next;
-                m_OpenUIFormList.Remove(curNode.Value);
+                _openUIFormList.Remove(curNode.Value);
                 if(curNode != null) {
                     Object.Destroy(curNode.Value.gameObject);
                 }
                 curNode = next;
             }
-            m_UIPool.ReleaseAll();
-            m_ReverseFormList.Clear();
+            _uiPool.ReleaseAll();
+            _reverseFormList.Clear();
         }
 
         /// <summary>
@@ -299,13 +299,13 @@ namespace SpriteFramework
         public UIFormBase GetUIForm(string formName) {
             int formId = GameEntry.DataTable.DTSysUIFormDBModel.GetEntity(formName).Id;
             //先检查 以打开的UI窗体列表
-            for (var curNode = m_OpenUIFormList.First; curNode != null; curNode = curNode.Next) {
+            for (var curNode = _openUIFormList.First; curNode != null; curNode = curNode.Next) {
                 if (curNode.Value.UIFormEntity.Id == formId) {
                     return curNode.Value;
                 }
             }
             //再看看对象池内有没有
-            return m_UIPool.GetUIForm(formId);
+            return _uiPool.GetUIForm(formId);
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace SpriteFramework
         /// <param name="formId"></param>
         /// <returns></returns>
         private bool IsOpened(int formId) {
-            for (var curNode = m_OpenUIFormList.First; curNode != null; curNode = curNode.Next){
+            for (var curNode = _openUIFormList.First; curNode != null; curNode = curNode.Next){
                 if(curNode.Value.UIFormEntity.Id == formId) {
                     return true;
                 }
@@ -327,11 +327,11 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="isAdd">升高还是降低</param>
         private void SetSortingOrder(UIFormBase formBase, bool isAdd) {
-            m_UILayer.SetSortingOrder(formBase, isAdd);
+            _uiLayer.SetSortingOrder(formBase, isAdd);
             if (isAdd) {
-                formBase.SetSortingOrder(m_UILayer.GetCurSortingOrder(formBase));
+                formBase.SetSortingOrder(_uiLayer.GetCurSortingOrder(formBase));
             } else {
-                var form = m_OpenUIFormList.FindLast(formBase);
+                var form = _openUIFormList.FindLast(formBase);
                 if(form != null && form.Next != null) {
                     for (var curNode = form.Next; curNode != null; curNode = curNode.Next) {
                         if (curNode.Value.UIFormEntity.UIGroupId != formBase.UIFormEntity.UIGroupId) continue;
@@ -350,12 +350,12 @@ namespace SpriteFramework
         }
 
         public void Dispose() {
-            m_OpenUIFormList.Clear();
-            m_ReverseFormList.Clear();
-            m_UIGroupDict.Clear();
+            _openUIFormList.Clear();
+            _reverseFormList.Clear();
+            _uiGroupDict.Clear();
 
-            m_UIPool.ReleaseAll();
-            m_UILayer.Dispose();
+            _uiPool.ReleaseAll();
+            _uiLayer.Dispose();
         }
 
     }

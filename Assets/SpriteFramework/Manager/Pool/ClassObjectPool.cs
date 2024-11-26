@@ -17,7 +17,7 @@ namespace SpriteFramework
         /// <summary>
         /// 类对象池字典(参数int:对象类型的哈希值)
         /// </summary>
-        private Dictionary<int, Queue<object>> m_ClassObjectPoolDict;
+        private Dictionary<int, Queue<object>> _classObjectPoolDict;
 
         /// <summary>
         /// 下次释放类对象运行时间
@@ -26,7 +26,7 @@ namespace SpriteFramework
 
         public ClassObjectPool() {
             ResidentCountDict = new Dictionary<int, byte>();
-            m_ClassObjectPoolDict = new Dictionary<int, Queue<object>>();
+            _classObjectPoolDict = new Dictionary<int, Queue<object>>();
 
             ReleaseNextRunTime = Time.time;
 
@@ -36,7 +36,7 @@ namespace SpriteFramework
         }
 
         internal void OnUpdate() {
-            if(m_ClassObjectPoolDict.Count > 0 && Time.time > ReleaseNextRunTime + MainEntry.ParamsSettings.PoolReleaseClassObjectInterval) {
+            if(_classObjectPoolDict.Count > 0 && Time.time > ReleaseNextRunTime + MainEntry.ParamsSettings.PoolReleaseClassObjectInterval) {
                 ReleaseNextRunTime = Time.time;
                 ReleasePool();
             }
@@ -56,13 +56,13 @@ namespace SpriteFramework
         /// 取出一个对象
         /// </summary>
         public T Dequeue<T>() where T : class, new() {
-            lock (m_ClassObjectPoolDict) {
+            lock (_classObjectPoolDict) {
                 //先获取类的哈希值
                 int key = typeof(T).GetHashCode();
-                m_ClassObjectPoolDict.TryGetValue(key, out Queue<object> queue);
+                _classObjectPoolDict.TryGetValue(key, out Queue<object> queue);
                 if (queue == null) {
                     queue = new Queue<object>();
-                    m_ClassObjectPoolDict[key] = queue;
+                    _classObjectPoolDict[key] = queue;
                 }
 
                 //开始获取对象 >0说明队列中有闲置的 <=0则表示队列中没有,需要进行实例化
@@ -81,9 +81,9 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="obj">要回池的对象</param>
         public void Enqueue(object obj) {
-            lock (m_ClassObjectPoolDict) {
+            lock (_classObjectPoolDict) {
                 int key = obj.GetType().GetHashCode();
-                m_ClassObjectPoolDict.TryGetValue(key, out Queue<object> queue);
+                _classObjectPoolDict.TryGetValue(key, out Queue<object> queue);
                 if(queue != null) {
                     queue.Enqueue(obj);
                 }
@@ -94,12 +94,12 @@ namespace SpriteFramework
         /// 释放类对象池
         /// </summary>
         public void ReleasePool() {
-            lock (m_ClassObjectPoolDict) {
+            lock (_classObjectPoolDict) {
                 int queueCount = 0;
-                var enumerator = m_ClassObjectPoolDict.GetEnumerator();
+                var enumerator = _classObjectPoolDict.GetEnumerator();
                 while (enumerator.MoveNext()) {
                     int key = enumerator.Current.Key;
-                    Queue<object> queue = m_ClassObjectPoolDict[key];
+                    Queue<object> queue = _classObjectPoolDict[key];
                     queueCount = queue.Count;
                     byte residentCount = 0;
                     ResidentCountDict.TryGetValue(key, out residentCount);
@@ -114,7 +114,7 @@ namespace SpriteFramework
 
         public void Dispose() {
             ResidentCountDict.Clear();
-            m_ClassObjectPoolDict.Clear();
+            _classObjectPoolDict.Clear();
         }
 
     }

@@ -16,45 +16,45 @@ namespace SpriteFramework
         /// <summary>
         /// 音效组件的集合
         /// </summary>
-        private List<AudioSource> m_AudioSourceList;
+        private List<AudioSource> _audioSourceList;
 
         /// <summary>
         /// 背景音乐组件
         /// </summary>
-        private AudioSource m_BgmSource;
+        private AudioSource _bgmSource;
 
         //当前正在播放的音效AudioSource的索引
-        private int m_CurIndex;
+        private int _curIndex;
 
         //背景音乐是否静音
-        private bool m_IsBgmMute;
+        private bool _isBgmMute;
         //音效是否静音
-        private bool m_IsSoundMute;
+        private bool _isSoundMute;
         //背景音乐音量
-        private float m_BgmVolume;
+        private float _bgmVolume;
         //音效音量
-        private float m_SoundVolume;
+        private float _soundVolume;
 
         //是否淡出
-        private bool m_IsFadeOut = false;
+        private bool _isFadeOut = false;
         //是否淡入
-        private bool m_IsFadeIn = true;
+        private bool _isFadeIn = true;
         //BGM淡入淡出的过渡音量
-        private float m_InterimBgmVolume;
+        private float _interimBgmVolume;
         //BGM的目标音量
-        private float m_TargetBgmVolume;
+        private float _targetBgmVolume;
 
         public AudioManager() {
-            m_AudioSourceList = new List<AudioSource>(MAX_SOUND_NUM);
+            _audioSourceList = new List<AudioSource>(MAX_SOUND_NUM);
 
             var obj = new GameObject("AudioManager");
             obj.transform.SetParent(GameEntry.Instance.transform);
             for (int i = 0; i < MAX_SOUND_NUM; i++) {
                 var source = obj.AddComponent<AudioSource>();
-                m_AudioSourceList.Add(source);
+                _audioSourceList.Add(source);
             }
-            m_BgmSource = obj.AddComponent<AudioSource>();
-            m_CurIndex = 0;
+            _bgmSource = obj.AddComponent<AudioSource>();
+            _curIndex = 0;
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace SpriteFramework
 
             SetBGMVolume(GameEntry.PlayerPrefs.GetFloat(PlayerPrefsConstKey.BgmVolume), false);
             SetSoundVolume(GameEntry.PlayerPrefs.GetFloat(PlayerPrefsConstKey.SoundVolume), false);
-            m_IsBgmMute = GameEntry.PlayerPrefs.GetBool(PlayerPrefsConstKey.BgmMute);
-            m_IsSoundMute = GameEntry.PlayerPrefs.GetBool(PlayerPrefsConstKey.SoundMute);
+            _isBgmMute = GameEntry.PlayerPrefs.GetBool(PlayerPrefsConstKey.BgmMute);
+            _isSoundMute = GameEntry.PlayerPrefs.GetBool(PlayerPrefsConstKey.SoundMute);
         }
 
         /// <summary>
@@ -85,18 +85,18 @@ namespace SpriteFramework
                 GameEntry.LogError("背景音乐:{0} 为null,请检查路径", soundName);
                 return;
             }
-            m_BgmSource.clip = clip;
-            m_BgmSource.loop = isLoop;
+            _bgmSource.clip = clip;
+            _bgmSource.loop = isLoop;
 
-            m_TargetBgmVolume = volume;
-            m_IsFadeIn = isFadeIn;
-            m_InterimBgmVolume = 0;
+            _targetBgmVolume = volume;
+            this._isFadeIn = isFadeIn;
+            _interimBgmVolume = 0;
 
             SetBGMVolume(volume);
-            if (isFadeIn) m_BgmSource.volume = 0;
+            if (isFadeIn) _bgmSource.volume = 0;
 
-            if (!m_IsBgmMute) {
-                m_BgmSource.Play();
+            if (!_isBgmMute) {
+                _bgmSource.Play();
             }
         }
 
@@ -106,9 +106,9 @@ namespace SpriteFramework
         /// <param name="isPause">是否暂停(true表示暂停,false表示重新播放)</param>
         public void PauseBgm(bool isPause = true) {
             if (isPause) {
-                m_BgmSource.Pause();
+                _bgmSource.Pause();
             } else {
-                m_BgmSource.UnPause();
+                _bgmSource.UnPause();
             }
         }
 
@@ -117,10 +117,10 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="isFadeOut">是否淡出</param>
         public void StopBgm(bool isFadeOut = true) {
-            m_IsFadeOut = isFadeOut;
+            this._isFadeOut = isFadeOut;
             if (!isFadeOut) {
-                m_BgmSource.Stop();
-                m_BgmSource.clip = null;
+                _bgmSource.Stop();
+                _bgmSource.clip = null;
             }
         }
 
@@ -139,16 +139,16 @@ namespace SpriteFramework
         }
 
         public int PlaySound(AudioClip clip, bool isLoop = false, float volume = 1.0f) {
-            int soundId = m_CurIndex;
-            AudioSource source = m_AudioSourceList[m_CurIndex];
-            m_CurIndex++;
-            m_CurIndex = m_CurIndex >= MAX_SOUND_NUM ? 0 : m_CurIndex;
+            int soundId = _curIndex;
+            AudioSource source = _audioSourceList[_curIndex];
+            _curIndex++;
+            _curIndex = _curIndex >= MAX_SOUND_NUM ? 0 : _curIndex;
 
             source.clip = clip;
             source.loop = isLoop;
             SetSoundVolume(volume, source);
 
-            if (m_IsSoundMute) {
+            if (_isSoundMute) {
                 return -1;
             }
 
@@ -167,16 +167,16 @@ namespace SpriteFramework
                 GameEntry.LogError("音效:{0} 为null,请检查路径");
                 return -1;
             }
-            int soundId = m_CurIndex;
-            AudioSource source = m_AudioSourceList[m_CurIndex];
-            m_CurIndex++;
-            m_CurIndex = m_CurIndex >= MAX_SOUND_NUM ? 0 : m_CurIndex;
+            int soundId = _curIndex;
+            AudioSource source = _audioSourceList[_curIndex];
+            _curIndex++;
+            _curIndex = _curIndex >= MAX_SOUND_NUM ? 0 : _curIndex;
 
             source.clip = clip;
             source.loop = isLoop;
             SetSoundVolume(volume, source);
 
-            if (m_IsSoundMute) {
+            if (_isSoundMute) {
                 return -1;
             }
 
@@ -192,7 +192,7 @@ namespace SpriteFramework
             if(soundId < 0 || soundId >= MAX_SOUND_NUM) {
                 return;
             }
-            AudioSource source = m_AudioSourceList[soundId];
+            AudioSource source = _audioSourceList[soundId];
             source.Stop();
             source.clip = null;
         }
@@ -202,7 +202,7 @@ namespace SpriteFramework
         /// </summary>
         public void StopAllSound() {
             for (int i = 0; i < MAX_SOUND_NUM; i++) {
-                var source = m_AudioSourceList[i];
+                var source = _audioSourceList[i];
                 source.Stop();
                 source.clip = null;
             }
@@ -211,31 +211,31 @@ namespace SpriteFramework
 
         public void OnUpdate() {
 
-            if (m_IsFadeOut) {
-                if(m_InterimBgmVolume > 0) {
+            if (_isFadeOut) {
+                if(_interimBgmVolume > 0) {
                     GameEntry.Log("淡出*******************");
-                    m_InterimBgmVolume -= Time.unscaledDeltaTime * 2;//0.5秒淡出时间
-                    SetBGMVolume(m_InterimBgmVolume, false);
+                    _interimBgmVolume -= Time.unscaledDeltaTime * 2;//0.5秒淡出时间
+                    SetBGMVolume(_interimBgmVolume, false);
                 } else {
                     GameEntry.Log("淡出结束*******************");
-                    m_InterimBgmVolume = 0;
-                    m_BgmSource.Stop();
-                    SetBGMVolume(m_InterimBgmVolume, false);
-                    m_BgmSource.clip = null;
-                    m_IsFadeOut = false;
+                    _interimBgmVolume = 0;
+                    _bgmSource.Stop();
+                    SetBGMVolume(_interimBgmVolume, false);
+                    _bgmSource.clip = null;
+                    _isFadeOut = false;
                 }
             }
 
-            if (m_IsFadeIn) {
-                if(m_InterimBgmVolume < m_TargetBgmVolume) {
+            if (_isFadeIn) {
+                if(_interimBgmVolume < _targetBgmVolume) {
                     GameEntry.Log("淡入*******************");
-                    m_InterimBgmVolume += Time.unscaledDeltaTime * 2;//0.5秒淡入时间
-                    SetBGMVolume(m_InterimBgmVolume, false);
-                }else if(m_InterimBgmVolume != m_TargetBgmVolume) {
+                    _interimBgmVolume += Time.unscaledDeltaTime * 2;//0.5秒淡入时间
+                    SetBGMVolume(_interimBgmVolume, false);
+                }else if(_interimBgmVolume != _targetBgmVolume) {
                     GameEntry.Log("淡入结束*******************");
-                    m_InterimBgmVolume = m_TargetBgmVolume;
-                    SetBGMVolume(m_TargetBgmVolume, false);
-                    m_IsFadeIn = false;
+                    _interimBgmVolume = _targetBgmVolume;
+                    SetBGMVolume(_targetBgmVolume, false);
+                    _isFadeIn = false;
                 }
             }
         }
@@ -247,8 +247,8 @@ namespace SpriteFramework
         /// <param name="isSave">数据是否保存到本地</param>
         public void SetBGMVolume(float volume, bool isSave = true) {
             volume = Mathf.Clamp(volume, 0, 1);
-            m_BgmSource.volume = volume;
-            m_BgmVolume = volume;
+            _bgmSource.volume = volume;
+            _bgmVolume = volume;
             if (isSave) {
                 GameEntry.PlayerPrefs.SetFloat(PlayerPrefsConstKey.BgmVolume, volume);
             }
@@ -260,9 +260,9 @@ namespace SpriteFramework
         /// <param name="volume">音效的音量</param>
         public void SetSoundVolume(float volume, bool isSave = true) {
             volume = Mathf.Clamp(volume, 0, 1);
-            m_SoundVolume = volume;
-            for (int i = 0; i < m_AudioSourceList.Count; i++) {
-                m_AudioSourceList[i].volume = volume;
+            _soundVolume = volume;
+            for (int i = 0; i < _audioSourceList.Count; i++) {
+                _audioSourceList[i].volume = volume;
             }
             if (isSave) {
                 GameEntry.PlayerPrefs.SetFloat(PlayerPrefsConstKey.SoundVolume, volume);
@@ -284,12 +284,12 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="isMute">是否静音</param>
         public void SetBgmMute(bool isMute = true) {
-            m_IsBgmMute = isMute;
+            _isBgmMute = isMute;
             if (isMute) {
-                m_BgmSource.volume = 0;
-            } else if(m_BgmSource.clip != null) {
-                m_BgmSource.volume = m_BgmVolume;
-                m_BgmSource.Play();
+                _bgmSource.volume = 0;
+            } else if(_bgmSource.clip != null) {
+                _bgmSource.volume = _bgmVolume;
+                _bgmSource.Play();
             }
             GameEntry.PlayerPrefs.SetBool(PlayerPrefsConstKey.BgmMute, isMute);
         }
@@ -299,14 +299,14 @@ namespace SpriteFramework
         /// </summary>
         /// <param name="isMute">是否静音</param>
         public void SetSoundMute(bool isMute = true) {
-            m_IsSoundMute = isMute;
+            _isSoundMute = isMute;
             if (isMute) {
-                m_SoundVolume = 0;
+                _soundVolume = 0;
             } else {
                 for (int i = 0; i < MAX_SOUND_NUM; i++) {
-                    var source = m_AudioSourceList[i];
+                    var source = _audioSourceList[i];
                     if(source.clip != null) {
-                        source.volume = m_SoundVolume;
+                        source.volume = _soundVolume;
                         source.Play();
                     }
                 }
@@ -315,11 +315,11 @@ namespace SpriteFramework
         }
 
         public void Dispose() {
-            for (int i = 0; i < m_AudioSourceList.Count; i++) {
-                m_AudioSourceList[i] = null;
+            for (int i = 0; i < _audioSourceList.Count; i++) {
+                _audioSourceList[i] = null;
             }
-            m_AudioSourceList.Clear();
-            m_BgmSource = null;
+            _audioSourceList.Clear();
+            _bgmSource = null;
         }
 
     }

@@ -10,14 +10,14 @@ namespace SpriteFramework
     public class GameObjectPool
     {
 
-        private Dictionary<string, PrefabPool> m_GameObjectPoolDict;
+        private Dictionary<string, PrefabPool> _gameObjectPoolDict;
 
-        private Transform m_Root;
+        private Transform _root;
 
         public GameObjectPool() {
-            m_GameObjectPoolDict = new Dictionary<string, PrefabPool>();
-            m_Root = new GameObject("GameObjectPool").transform;
-            m_Root.SetParent(GameEntry.Instance.transform);
+            _gameObjectPoolDict = new Dictionary<string, PrefabPool>();
+            _root = new GameObject("GameObjectPool").transform;
+            _root.SetParent(GameEntry.Instance.transform);
         }
 
         /// <summary>
@@ -29,13 +29,13 @@ namespace SpriteFramework
                 return null;
             }
             string name = prefab.name;
-            m_GameObjectPoolDict.TryGetValue(name, out PrefabPool prefabPool);
+            _gameObjectPoolDict.TryGetValue(name, out PrefabPool prefabPool);
             if(prefabPool == null) {
                 prefabPool = new PrefabPool(prefab);
                 var root = new GameObject(prefab.name + "Pool");
-                root.transform.SetParent(m_Root);
+                root.transform.SetParent(_root);
                 prefabPool.PreloadPool(root.transform);
-                m_GameObjectPoolDict[name] = prefabPool;
+                _gameObjectPoolDict[name] = prefabPool;
             }
             prefabPool.Prefab = prefab;
             GameObject obj = prefabPool.DequeueObj();
@@ -65,7 +65,7 @@ namespace SpriteFramework
         public void Enqueue(GameObject obj) {
             if (obj == null) return;
             string name = GetObjName(obj);
-            if (m_GameObjectPoolDict.TryGetValue(name, out PrefabPool prefabPool)) {
+            if (_gameObjectPoolDict.TryGetValue(name, out PrefabPool prefabPool)) {
                 prefabPool.EnqueueObj(obj);
             }
         }
@@ -75,7 +75,7 @@ namespace SpriteFramework
         /// </summary>
         public void Destroy(GameObject obj) {
             string name = GetObjName(obj);
-            if(m_GameObjectPoolDict.TryGetValue(name, out PrefabPool prefabPool)) {
+            if(_gameObjectPoolDict.TryGetValue(name, out PrefabPool prefabPool)) {
                 prefabPool.Destroy(obj);
             } else {
                 GameEntry.LogError("该对象:{0} 不存在池内", obj.name);
@@ -87,11 +87,11 @@ namespace SpriteFramework
         }
 
         public void Dispose() {
-            var enumerator = m_GameObjectPoolDict.GetEnumerator();
+            var enumerator = _gameObjectPoolDict.GetEnumerator();
             while (enumerator.MoveNext()) {
                 enumerator.Current.Value.ClearPool();
             }
-            m_GameObjectPoolDict.Clear();
+            _gameObjectPoolDict.Clear();
         }
 
     }

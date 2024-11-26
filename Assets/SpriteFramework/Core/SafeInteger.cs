@@ -6,16 +6,16 @@ namespace SpriteFramework
     public struct SafeInteger
     {
 
-        private int m_EncryptValue;
+        private int _encryptValue;
 
-        private const int m_Mask = 9981;
+        private const int _mask = 9981;
 
         /// <summary>
         /// 真实值（方便在Lua中调用）
         /// </summary>
         public int RealValue {
             get {
-                int v = m_EncryptValue ^ m_Mask;
+                int v = _encryptValue ^ _mask;
                 return (int)((uint)v << 16 | (uint)v >> 16);
             }
         }
@@ -27,12 +27,12 @@ namespace SpriteFramework
         public static implicit operator SafeInteger(int n) {
             SafeInteger safeInteger;
             n = (int)((uint)n << 16 | (uint)n >> 16);
-            safeInteger.m_EncryptValue = n ^ m_Mask;
+            safeInteger._encryptValue = n ^ _mask;
             return safeInteger;
         }  
 
         public static implicit operator int(SafeInteger safeInteger) {
-            int v = safeInteger ^ m_Mask;
+            int v = safeInteger ^ _mask;
             return (int)((uint)v << 16 | (uint)v >> 16);
         }
 

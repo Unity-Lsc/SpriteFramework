@@ -17,17 +17,17 @@ namespace SpriteFramework
         /// <summary>
         /// 当前状态
         /// </summary>
-        private FsmState<T> m_CurrState;
+        private FsmState<T> _curState;
 
         /// <summary>
         /// 状态字典
         /// </summary>
-        private Dictionary<sbyte, FsmState<T>> m_StateDict;
+        private readonly Dictionary<sbyte, FsmState<T>> _stateDict;
 
         /// <summary>
         /// 参数字典
         /// </summary>
-        private Dictionary<string, VariableBase> m_ParamDict;
+        private readonly Dictionary<string, VariableBase> _paramDict;
 
         /// <summary>
         /// 构造函数
@@ -36,8 +36,8 @@ namespace SpriteFramework
         /// <param name="owner">拥有者</param>
         /// <param name="states">状态数组</param>
         public Fsm(int fsmId, T owner, FsmState<T>[] states) : base(fsmId) {
-            m_StateDict = new();
-            m_ParamDict = new();
+            _stateDict = new();
+            _paramDict = new();
             Owner = owner;
 
             int len = states.Length;
@@ -46,7 +46,7 @@ namespace SpriteFramework
                 if(states != null) {
                     state.CurrFsm = this;
                 }
-                m_StateDict[(sbyte)i] = state;
+                _stateDict[(sbyte)i] = state;
             }
             CurStateType = -1;
         }
@@ -57,13 +57,13 @@ namespace SpriteFramework
         /// <param name="stateType">状态类型</param>
         /// <returns></returns>
         public FsmState<T> GetState(sbyte stateType) {
-            m_StateDict.TryGetValue(stateType, out FsmState<T> state);
+            _stateDict.TryGetValue(stateType, out FsmState<T> state);
             return state;
         }
 
         public void OnUpdate() {
-            if(m_CurrState != null) {
-                m_CurrState.OnUpdate();
+            if(_curState != null) {
+                _curState.OnUpdate();
             }
         }
 
@@ -74,15 +74,15 @@ namespace SpriteFramework
         public void ChangeState(sbyte newState) {
             if (CurStateType == newState) return;
 
-            if(m_CurrState != null) {
-                m_CurrState.OnLeave();
+            if(_curState != null) {
+                _curState.OnLeave();
             }
 
             CurStateType = newState;
-            m_CurrState = m_StateDict[CurStateType];
+            _curState = _stateDict[CurStateType];
 
             //进入新的状态
-            m_CurrState.OnEnter();
+            _curState.OnEnter();
         }
 
         /// <summary>
@@ -93,14 +93,14 @@ namespace SpriteFramework
         /// <param name="value"></param>
         public void SetData<TData>(string key, TData value) {
             Variable<TData> item;
-            if (m_ParamDict.TryGetValue(key, out VariableBase itemBase)) {
+            if (_paramDict.TryGetValue(key, out VariableBase itemBase)) {
                 item = itemBase as Variable<TData>;
             } else {
                 //参数原来不存在
                 item = new Variable<TData>();
             }
             item.Value = value;
-            m_ParamDict[key] = item;
+            _paramDict[key] = item;
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace SpriteFramework
         /// <param name="key"></param>
         /// <returns></returns>
         public TData GetData<TData>(string key) {
-            if (m_ParamDict.TryGetValue(key, out VariableBase itemBase)) {
+            if (_paramDict.TryGetValue(key, out VariableBase itemBase)) {
                 Variable<TData> item = itemBase as Variable<TData>;
                 return item.Value;
             }
@@ -118,18 +118,18 @@ namespace SpriteFramework
         }
 
         public override void ShutDown() {
-            if(m_CurrState != null) {
-                m_CurrState.OnLeave();
+            if(_curState != null) {
+                _curState.OnLeave();
             }
-            var enumerator = m_StateDict.GetEnumerator();
+            var enumerator = _stateDict.GetEnumerator();
             while (enumerator.MoveNext()) {
                 var state = enumerator.Current.Value;
                 if (state != null) {
                     state.OnDestroy();
                 }
             }
-            m_StateDict.Clear();
-            m_ParamDict.Clear();
+            _stateDict.Clear();
+            _paramDict.Clear();
         }
     }
 }

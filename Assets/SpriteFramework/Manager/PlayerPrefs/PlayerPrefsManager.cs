@@ -10,23 +10,23 @@ namespace SpriteFramework
     public class PlayerPrefsManager
     {
 
-        private Dictionary<string, int> m_IntDict;
-        private Dictionary<string, float> m_FloatDict;
-        private Dictionary<string, string> m_StringDict;
+        private Dictionary<string, int> _intDict;
+        private Dictionary<string, float> _floatDict;
+        private Dictionary<string, string> _stringDict;
 
         public PlayerPrefsManager() {
-            m_IntDict = GetObject<Dictionary<string, int>>("m_IntDict");
-            m_FloatDict = GetObject<Dictionary<string, float>>("m_FloatDict");
-            m_StringDict = GetObject<Dictionary<string, string>>("m_StringDict");
+            _intDict = GetObject<Dictionary<string, int>>("m_IntDict");
+            _floatDict = GetObject<Dictionary<string, float>>("m_FloatDict");
+            _stringDict = GetObject<Dictionary<string, string>>("m_StringDict");
         }
 
         public int GetInt(string key,int defaultValue = 0) {
-            if (m_IntDict.TryGetValue(key, out int retValue))
+            if (_intDict.TryGetValue(key, out int retValue))
                 return retValue;
             return defaultValue;
         }
         public void SetInt(string key, int value) {
-            m_IntDict[key] = value;
+            _intDict[key] = value;
         }
         public void SetIntAdd(string key, int value) {
             SetInt(key, GetInt(key) + value);
@@ -51,13 +51,13 @@ namespace SpriteFramework
         }
 
         public float GetFloat(string key, float defaultValue = 0) {
-            if (m_FloatDict.TryGetValue(key, out float retValue))
+            if (_floatDict.TryGetValue(key, out float retValue))
                 return retValue;
             else
                 return defaultValue;
         }
         public void SetFloat(string key, float value, object param = null) {
-            m_FloatDict[key] = value;
+            _floatDict[key] = value;
         }
         public void SetFloatAdd(string key, float value) {
             SetFloat(key, GetFloat(key) + value);
@@ -68,16 +68,16 @@ namespace SpriteFramework
         }
 
         public string GetString(string key, string defaultValue = null) {
-            if (m_StringDict.TryGetValue(key, out string retValue))
+            if (_stringDict.TryGetValue(key, out string retValue))
                 return retValue;
             else
                 return defaultValue;
         }
         public void SetString(string key, string value, object param = null) {
-            m_StringDict[key] = value;
+            _stringDict[key] = value;
         }
         public void SetStringHas(string key, string value) {
-            if (m_StringDict.ContainsKey(key)) return;
+            if (_stringDict.ContainsKey(key)) return;
             SetString(key, value);
         }
 
@@ -85,9 +85,9 @@ namespace SpriteFramework
         /// 保存所有数据
         /// </summary>
         public void SaveAllData() {
-            SetObject("m_IntDict", m_IntDict);
-            SetObject("m_FloatDict", m_FloatDict);
-            SetObject("m_StringDict", m_StringDict);
+            SetObject("m_IntDict", _intDict);
+            SetObject("m_FloatDict", _floatDict);
+            SetObject("m_StringDict", _stringDict);
         }
 
         /// <summary>
@@ -111,9 +111,9 @@ namespace SpriteFramework
         }
 
         public void Dispose() {
-            m_IntDict.Clear();
-            m_FloatDict.Clear();
-            m_StringDict.Clear();
+            _intDict.Clear();
+            _floatDict.Clear();
+            _stringDict.Clear();
         }
 
     }

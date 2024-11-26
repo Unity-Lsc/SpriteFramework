@@ -12,11 +12,11 @@ namespace SpriteFramework
         /// <summary>
         /// 正式账号服务器Url
         /// </summary>
-        private string m_WebAccountUrl;
+        private string _webAccountUrl;
         /// <summary>
         /// 测试账号服务器Url
         /// </summary>
-        private string m_TestWebAccountUrl;
+        private string _testWebAccountUrl;
         /// <summary>
         /// 是否测试环境
         /// </summary>
@@ -25,11 +25,11 @@ namespace SpriteFramework
         /// 真实账号服务器Url
         /// </summary>
         public string RealWebAccountUrl { get { return "http://" + RealIpAndPort + "/"; } }
-        public string RealIpAndPort { get { return m_IsTest ? m_TestWebAccountUrl : m_WebAccountUrl; } }
+        public string RealIpAndPort { get { return m_IsTest ? _testWebAccountUrl : _webAccountUrl; } }
 
         public HttpManager() {
-            m_WebAccountUrl = MainEntry.ParamsSettings.WebAccountUrl;
-            m_TestWebAccountUrl = MainEntry.ParamsSettings.TestWebAccountUrl;
+            _webAccountUrl = MainEntry.ParamsSettings.WebAccountUrl;
+            _testWebAccountUrl = MainEntry.ParamsSettings.TestWebAccountUrl;
             m_IsTest = MainEntry.ParamsSettings.IsTest;
         }
 

@@ -39,10 +39,10 @@ namespace SpriteFramework
         /// <summary>
         /// SocketTcp访问器的链表
         /// </summary>
-        private LinkedList<SocketTcpRoutine> m_SocketTcpRoutineList;
+        private LinkedList<SocketTcpRoutine> _socketTcpRoutineList;
 
         public SocketManager() {
-            m_SocketTcpRoutineList = new LinkedList<SocketTcpRoutine>();
+            _socketTcpRoutineList = new LinkedList<SocketTcpRoutine>();
 
             SocketSendMS = new SpriteMemoryStream();
             SocketReceiveMS = new SpriteMemoryStream();
@@ -79,24 +79,24 @@ namespace SpriteFramework
         /// 注册SocketTcp访问器
         /// </summary>
         internal void RegisterSocketTcpRoutine(SocketTcpRoutine routine) {
-            m_SocketTcpRoutineList.AddFirst(routine);
+            _socketTcpRoutineList.AddFirst(routine);
         }
 
         /// <summary>
         /// 移除SocketTcp访问器
         /// </summary>
         internal void RemoveSocketTcpRoutine(SocketTcpRoutine routine) {
-            m_SocketTcpRoutineList.Remove(routine);
+            _socketTcpRoutineList.Remove(routine);
         }
 
         internal void OnUpdate() {
-            for (LinkedListNode<SocketTcpRoutine> curRoutine = m_SocketTcpRoutineList.First; curRoutine != null; curRoutine = curRoutine.Next) {
+            for (LinkedListNode<SocketTcpRoutine> curRoutine = _socketTcpRoutineList.First; curRoutine != null; curRoutine = curRoutine.Next) {
                 curRoutine.Value.OnUpdate();
             }
         }
 
         public void Dispose() {
-            m_SocketTcpRoutineList.Clear();
+            _socketTcpRoutineList.Clear();
 
             m_MainSocketRoutine.DisConnect();
             GameEntry.Pool.ClassObjectPool.Enqueue(m_MainSocketRoutine);

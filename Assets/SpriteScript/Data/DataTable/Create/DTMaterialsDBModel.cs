@@ -40,8 +40,8 @@ namespace SpriteFramework
                 entity.CompositionGold = ms.ReadUTF8String();
                 entity.SellMoney = ms.ReadInt();
 
-                m_List.Add(entity);
-                m_Dic[entity.Id] = entity;
+                _entityList.Add(entity);
+                _entityDict[entity.Id] = entity;
             }
         }
     }

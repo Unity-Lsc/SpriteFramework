@@ -12,32 +12,32 @@ namespace SpriteFramework
         /// <summary>
         /// 临时目标时间点
         /// </summary>
-        private float m_TillTime;
+        private float _tillTime;
 
         /// <summary>
         /// 当前循环次数
         /// </summary>
-        private int m_CurrLoop;
+        private int _curLoop;
 
         /// <summary>
         /// 间隔（秒）
         /// </summary>
-        private float m_Interval;
+        private float _interval;
 
         /// <summary>
         /// 目标循环次数(-1表示 无限循环 0也会循环一次)
         /// </summary>
-        private int m_Loop;
+        private int _loop;
 
         /// <summary>
         /// 最后暂停时间
         /// </summary>
-        private float m_LastPauseTime;
+        private float _lastPauseTime;
 
         /// <summary>
         /// 是否无视时间缩放 TODO
         /// </summary>
-        private bool m_IsUnscaled;
+        private bool _isUnscaled;
 
         /// <summary>
         /// 运行中的回调 回调参数表示剩余次数
@@ -64,21 +64,21 @@ namespace SpriteFramework
         /// <param name="onComplete">运行完毕的回调</param>
         /// <param name="isUnScaled">是否忽略时间缩放(默认不忽略)</param>
         internal TimeAction Init(object target, float interval, int loop, Action<int> onUpdate, Action onComplete, bool isUnScaled) {
-            if(m_TillTime > 0) {
+            if(_tillTime > 0) {
                 GameEntry.Log("定时器正在使用中");
                 return null;
             }
 
             Target = target;
-            m_IsUnscaled = isUnScaled;
-            m_Interval = interval;
-            m_TillTime = (m_IsUnscaled ? Time.unscaledTime : Time.time) + m_Interval;
-            m_Loop = loop;
+            _isUnscaled = isUnScaled;
+            _interval = interval;
+            _tillTime = (_isUnscaled ? Time.unscaledTime : Time.time) + _interval;
+            _loop = loop;
             OnUpdateCallback = onUpdate;
             OnCompleteCallback = onComplete;
 
-            m_CurrLoop = 0;
-            GameEntry.Time.Register(m_TillTime, this, isUnScaled);
+            _curLoop = 0;
+            GameEntry.Time.Register(_tillTime, this, isUnScaled);
             return this;
         }
 
@@ -87,19 +87,19 @@ namespace SpriteFramework
         /// </summary>
         public void Stop() {
             //防止重复停止
-            if (m_TillTime == 0) return;
-            GameEntry.Time.Remove(m_TillTime, this, m_IsUnscaled);
+            if (_tillTime == 0) return;
+            GameEntry.Time.Remove(_tillTime, this, _isUnscaled);
             OnUpdateCallback = null;
             OnCompleteCallback = null;
-            m_TillTime = 0;
+            _tillTime = 0;
         }
 
         /// <summary>
         /// 暂停计时器
         /// </summary>
         public void Pause() {
-            m_LastPauseTime = m_IsUnscaled ? Time.unscaledTime : Time.time;
-            GameEntry.Time.Remove(m_TillTime, this, m_IsUnscaled);
+            _lastPauseTime = _isUnscaled ? Time.unscaledTime : Time.time;
+            GameEntry.Time.Remove(_tillTime, this, _isUnscaled);
         }
 
         /// <summary>
@@ -107,9 +107,9 @@ namespace SpriteFramework
         /// </summary>
         public void Resume() {
             //暂停的时间
-            float deltaTime = (m_IsUnscaled ? Time.unscaledTime : Time.time) - m_LastPauseTime;
-            m_TillTime += deltaTime;
-            GameEntry.Time.Register(m_TillTime, this, m_IsUnscaled);
+            float deltaTime = (_isUnscaled ? Time.unscaledTime : Time.time) - _lastPauseTime;
+            _tillTime += deltaTime;
+            GameEntry.Time.Register(_tillTime, this, _isUnscaled);
         }
 
         /// <summary>
@@ -121,11 +121,11 @@ namespace SpriteFramework
                 GameEntry.LogWarning("TimeAction.OnUpdateCallback.Target==null");
                 return;
             }
-            m_CurrLoop++;
-            OnUpdateCallback?.Invoke(m_Loop - m_CurrLoop);
+            _curLoop++;
+            OnUpdateCallback?.Invoke(_loop - _curLoop);
 
             //-1表示无限次循环, 那么永远不会执行OnCompleteCallback
-            if (m_CurrLoop >= m_Loop && m_Loop != -1) {
+            if (_curLoop >= _loop && _loop != -1) {
                 if (Target == null) {
                     GameEntry.LogWarning("TimeAction.OnUpdateCallback.Target==null");
                     return;
@@ -135,8 +135,8 @@ namespace SpriteFramework
             } 
             //继续循环
             else {
-                m_TillTime = (m_IsUnscaled ? Time.unscaledTime : Time.time) + m_Interval;
-                GameEntry.Time.Register(m_TillTime, this, m_IsUnscaled);
+                _tillTime = (_isUnscaled ? Time.unscaledTime : Time.time) + _interval;
+                GameEntry.Time.Register(_tillTime, this, _isUnscaled);
             }
         }
 

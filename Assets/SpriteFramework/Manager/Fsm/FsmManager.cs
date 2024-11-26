@@ -10,15 +10,15 @@ namespace SpriteFramework
         /// <summary>
         /// 存储状态机的集合
         /// </summary>
-        private Dictionary<int, FsmBase> m_FsmDict;
+        private Dictionary<int, FsmBase> _fsmDict;
 
         /// <summary>
         /// 状态机的临时编号
         /// </summary>
-        private int m_FsmTempId = 0;
+        private int _fsmTempId = 0;
 
         public FsmManager() {
-            m_FsmDict = new();
+            _fsmDict = new();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace SpriteFramework
         /// <param name="owner">拥有者</param>
         /// <param name="states">状态数组</param>
         public Fsm<T> Create<T>(T owner, FsmState<T>[] states) where T : class {
-            return Create<T>(m_FsmTempId++, owner, states);
+            return Create<T>(_fsmTempId++, owner, states);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace SpriteFramework
         /// <param name="states">状态数组</param>
         public Fsm<T> Create<T>(int fsmId, T owner, FsmState<T>[] states) where T : class {
             Fsm<T> fsm = new Fsm<T>(fsmId, owner, states);
-            m_FsmDict[fsmId] = fsm;
+            _fsmDict[fsmId] = fsm;
             return fsm;
         }
 
@@ -48,18 +48,18 @@ namespace SpriteFramework
         /// 销毁状态机
         /// </summary>
         public void DestroyFsm(int fsmId) {
-            if(m_FsmDict.TryGetValue(fsmId, out FsmBase fsm)) {
+            if(_fsmDict.TryGetValue(fsmId, out FsmBase fsm)) {
                 fsm.ShutDown();
-                m_FsmDict.Remove(fsmId);
+                _fsmDict.Remove(fsmId);
             }
         }
 
         public void Dispose() {
-            var enumerator = m_FsmDict.GetEnumerator();
+            var enumerator = _fsmDict.GetEnumerator();
             while (enumerator.MoveNext()) {
                 enumerator.Current.Value.ShutDown();
             }
-            m_FsmDict.Clear();
+            _fsmDict.Clear();
         }
 
     }

@@ -13,18 +13,18 @@ namespace SpriteFramework
         /// <summary>
         /// Entity对象的集合
         /// </summary>
-        protected List<P> m_List;
-        public int Count { get { return m_List.Count; } }
+        protected List<P> _entityList;
+        public int Count { get { return _entityList.Count; } }
 
         /// <summary>
         /// Key:Entity的ID
         /// Value:Entity对象
         /// </summary>
-        protected Dictionary<int, P> m_Dic;
+        protected Dictionary<int, P> _entityDict;
 
         public DataTableDBModelBase() {
-            m_List = new List<P>();
-            m_Dic = new Dictionary<int, P>();
+            _entityList = new List<P>();
+            _entityDict = new Dictionary<int, P>();
         }
 
         #region 需要子类实现的属性,方法
@@ -61,7 +61,7 @@ namespace SpriteFramework
         /// </summary>
         /// <returns></returns>
         public List<P> GetDatas() {
-            return m_List;
+            return _entityList;
         }
         #endregion
 
@@ -71,7 +71,7 @@ namespace SpriteFramework
         /// </summary>
         public P GetDataById(int id) {
             P p;
-            if (m_Dic.TryGetValue(id, out p)) {
+            if (_entityDict.TryGetValue(id, out p)) {
                 return p;
             } else {
                 GameEntry.LogError("该ID:{0} 对应的数据实体不存在", id);
@@ -84,8 +84,8 @@ namespace SpriteFramework
         /// 清空数据
         /// </summary>
         internal void Clear() {
-            m_List.Clear();
-            m_Dic.Clear();
+            _entityList.Clear();
+            _entityDict.Clear();
         }
 
     }

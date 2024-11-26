@@ -12,45 +12,45 @@ namespace SpriteFramework
     public class SocketTcpRoutine
     {
         //发送消息队列
-        private Queue<byte[]> mSendQueue = new Queue<byte[]>();
+        private Queue<byte[]> _sendQueue = new Queue<byte[]>();
         //压缩数组的长度界限
-        private const int mCompressLen = 200;
+        private const int _compressLen = 200;
 
         //是否连接成功
-        private bool mIsConnectedSuccess;
+        private bool _isConnectedSuccess;
 
         //接收数据包的字节数组缓冲区
-        private byte[] mReceiveBuffer = new byte[1024];
+        private byte[] _receiveBuffer = new byte[1024];
         //接收数据包的缓冲数据流
-        private SpriteMemoryStream mReceiveMS = new SpriteMemoryStream();
+        private SpriteMemoryStream _receiveMS = new SpriteMemoryStream();
 
         /// <summary>
         /// 发送用的MemoryStream
         /// </summary>
-        private SpriteMemoryStream mSocketSendMS = new SpriteMemoryStream();
+        private SpriteMemoryStream _socketSendMS = new SpriteMemoryStream();
         /// <summary>
         /// 接收用的MemoryStream
         /// </summary>
-        private SpriteMemoryStream mSocketReceiveMS = new SpriteMemoryStream();
+        private SpriteMemoryStream _socketReceiveMS = new SpriteMemoryStream();
 
         //接收消息的队列
-        private Queue<byte[]> mReceiveQueue = new Queue<byte[]>();
+        private Queue<byte[]> _receiveQueue = new Queue<byte[]>();
         //接收消息的数量
-        private int mReceiveCount = 0;
+        private int _receiveCount = 0;
 
         //这一帧发送了多少
-        private int mSendCount = 0;
+        private int _sendCount = 0;
 
         //是否有未处理的字节
-        private bool mIsHasUnDealBytes = false;
+        private bool _isHasUnDealBytes = false;
 
         //未处理的字节
-        private byte[] mUnDealBytes = null;
+        private byte[] _unDealBytes = null;
 
         /// <summary>
         /// 客户端socket
         /// </summary>
-        private Socket mClient;
+        private Socket _client;
 
         /// <summary>
         /// 连接成功的回调
@@ -59,20 +59,20 @@ namespace SpriteFramework
 
 
         internal void OnUpdate() {
-            if (mIsConnectedSuccess) {
-                mIsConnectedSuccess = false;
+            if (_isConnectedSuccess) {
+                _isConnectedSuccess = false;
                 OnConnectSuccess?.Invoke();
                 Debug.Log("Socket Tcp 连接成功");
             }
 
             //从队列中获取消息
             while (true) {
-                if (mReceiveCount <= GameEntry.Socket.MaxReceiveCount) {
-                    mReceiveCount++;
-                    lock (mReceiveQueue) {
-                        if (mReceiveQueue.Count > 0) {
+                if (_receiveCount <= GameEntry.Socket.MaxReceiveCount) {
+                    _receiveCount++;
+                    lock (_receiveQueue) {
+                        if (_receiveQueue.Count > 0) {
                             //得到队列中的数据包
-                            byte[] buffer = mReceiveQueue.Dequeue();
+                            byte[] buffer = _receiveQueue.Dequeue();
                             //异或之后的数组
                             byte[] bufferNew = new byte[buffer.Length - 3];
 
@@ -115,7 +115,7 @@ namespace SpriteFramework
                         }
                     }
                 } else {
-                    mReceiveCount = 0;
+                    _receiveCount = 0;
                     break;
                 }
             }
@@ -131,7 +131,7 @@ namespace SpriteFramework
         /// <param name="port">端口号</param>
         public void Connect(string ip, int port) {
             //如果Socket已经存在,并且处于连接中状态 则直接返回
-            if (mClient != null && mClient.Connected) return;
+            if (_client != null && _client.Connected) return;
 
             string newServerIP = ip;
             AddressFamily addressFamily = AddressFamily.InterNetwork;
@@ -139,10 +139,10 @@ namespace SpriteFramework
 #if UNITY_IPHONE && !UNITY_EDITOR && SDKCHANNEL_APPLE_STORE
             AppleStoreInterface.GetIPv6Type(ip, port.ToString(), out newServerIp, out addressFamily);
 #endif
-            mClient = new Socket(addressFamily, SocketType.Stream, ProtocolType.Tcp);
+            _client = new Socket(addressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             try {
-                mClient.BeginConnect(new IPEndPoint(IPAddress.Parse(newServerIP), port), ConnectCallBack, mClient);
+                _client.BeginConnect(new IPEndPoint(IPAddress.Parse(newServerIP), port), ConnectCallBack, _client);
             } catch (Exception ex) {
                 Debug.Log("连接失败:" + ex.Message);
             }
@@ -150,25 +150,25 @@ namespace SpriteFramework
         }
 
         private void ConnectCallBack(IAsyncResult ar) {
-            if (mClient.Connected) {
+            if (_client.Connected) {
                 Debug.Log("Socket连接成功");
                 GameEntry.Socket.RegisterSocketTcpRoutine(this);
 
                 ReceiveMsg();
-                mIsConnectedSuccess = true;
+                _isConnectedSuccess = true;
             } else {
                 Debug.Log("连接失败");
             }
-            mClient.EndConnect(ar);
+            _client.EndConnect(ar);
         }
 
         /// <summary>
         /// 断开连接
         /// </summary>
         public void DisConnect() {
-            if (mClient != null && mClient.Connected) {
-                mClient.Shutdown(SocketShutdown.Both);
-                mClient.Close();
+            if (_client != null && _client.Connected) {
+                _client.Shutdown(SocketShutdown.Both);
+                _client.Close();
                 GameEntry.Socket.RemoveSocketTcpRoutine(this);
             }
         }
@@ -177,39 +177,39 @@ namespace SpriteFramework
         /// 检查发送队列
         /// </summary>
         private void CheckSendQueue() {
-            if (mSendCount >= GameEntry.Socket.MaxSendCount) {
+            if (_sendCount >= GameEntry.Socket.MaxSendCount) {
                 //等待下一帧发送
-                mSendCount = 0;
+                _sendCount = 0;
                 return;
             }
-            lock (mSendQueue) {
-                if (mSendQueue.Count > 0 || mIsHasUnDealBytes) {
+            lock (_sendQueue) {
+                if (_sendQueue.Count > 0 || _isHasUnDealBytes) {
                     int smallCount = 0;//拼凑的小包数量
-                    SpriteMemoryStream ms = mSocketSendMS;
+                    SpriteMemoryStream ms = _socketSendMS;
                     ms.SetLength(0);
 
                     //先处理 未处理的包
-                    if (mIsHasUnDealBytes) {
-                        mIsHasUnDealBytes = false;
-                        ms.Write(mUnDealBytes, 0, mUnDealBytes.Length);
+                    if (_isHasUnDealBytes) {
+                        _isHasUnDealBytes = false;
+                        ms.Write(_unDealBytes, 0, _unDealBytes.Length);
                         smallCount++;
                     }
                     //再检查队列中的包
                     while (true) {
-                        if (mSendQueue.Count == 0) break;
+                        if (_sendQueue.Count == 0) break;
                         //取出一个字节数组
-                        byte[] buffer = mSendQueue.Dequeue();
+                        byte[] buffer = _sendQueue.Dequeue();
                         if (buffer.Length + ms.Length <= GameEntry.Socket.MaxSendByteCount) {
                             smallCount++;
                             ms.Write(buffer, 0, buffer.Length);
                         } else {
                             //有未处理的字节
-                            mUnDealBytes = buffer;
-                            mIsHasUnDealBytes = true;
+                            _unDealBytes = buffer;
+                            _isHasUnDealBytes = true;
                             break;//非常重要
                         }
                     }
-                    mSendCount++;
+                    _sendCount++;
                     Debug.Log("拼凑的小包数量:" + smallCount);
                     Send(ms.ToArray());
                 }
@@ -222,7 +222,7 @@ namespace SpriteFramework
         private byte[] MakeData(byte[] data) {
             byte[] retBuffer = null;
             //1.如果数据包的长度 大于了mCompressLen 则进行压缩
-            bool isCompress = data.Length > mCompressLen;
+            bool isCompress = data.Length > _compressLen;
             if (isCompress) {
                 data = ZlibHelper.CompressBytes(data);
             }
@@ -233,7 +233,7 @@ namespace SpriteFramework
             //3.Crc校验 压缩后的
             ushort crc = Crc16.CalculateCrc16(data);
 
-            SpriteMemoryStream ms = mSocketSendMS;
+            SpriteMemoryStream ms = _socketSendMS;
             ms.SetLength(0);
 
             ms.WriteUShort((ushort)(data.Length + 3));
@@ -252,9 +252,9 @@ namespace SpriteFramework
             //得到封装后的数据包
             byte[] sendBuffer = MakeData(buffer);
 
-            lock (mSendQueue) {
+            lock (_sendQueue) {
                 //把数据包加入队列
-                mSendQueue.Enqueue(sendBuffer);
+                _sendQueue.Enqueue(sendBuffer);
             }
         }
 
@@ -263,21 +263,21 @@ namespace SpriteFramework
         /// </summary>
 
         private void Send(byte[] buffer) {
-            mClient.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, SendCallBack, mClient);
+            _client.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, SendCallBack, _client);
         }
 
         /// <summary>
         /// 发送数据包的回调
         /// </summary>
         private void SendCallBack(IAsyncResult ar) {
-            mClient.EndSend(ar);
+            _client.EndSend(ar);
         }
 
         /// <summary>
         /// 接收数据
         /// </summary>
         private void ReceiveMsg() {
-            mClient.BeginReceive(mReceiveBuffer, 0, mReceiveBuffer.Length, SocketFlags.None, ReceiveCallBack, mClient);
+            _client.BeginReceive(_receiveBuffer, 0, _receiveBuffer.Length, SocketFlags.None, ReceiveCallBack, _client);
         }
 
         #region 接收数据回调
@@ -286,70 +286,70 @@ namespace SpriteFramework
         /// </summary>
         private void ReceiveCallBack(IAsyncResult ar) {
             try {
-                int len = mClient.EndReceive(ar);
+                int len = _client.EndReceive(ar);
                 if (len > 0) {
                     //已经接收到数据
                     //把接收到数据 写入缓冲数据流的尾部
-                    mReceiveMS.Position = mReceiveMS.Length;
+                    _receiveMS.Position = _receiveMS.Length;
                     //把指定长度的字节 写入数据流
-                    mReceiveMS.Write(mReceiveBuffer, 0, len);
+                    _receiveMS.Write(_receiveBuffer, 0, len);
                     //如果缓存数据流的长度>2 说明至少有个不完整的包过来了
                     //为什么这里是2 因为我们客户端封装数据包 用的ushort 长度就是2
-                    if (mReceiveMS.Length > 2) {
+                    if (_receiveMS.Length > 2) {
                         //进行循环 拆分数据包
                         while (true) {
                             //把数据流指针位置放在0处
-                            mReceiveMS.Position = 0;
+                            _receiveMS.Position = 0;
 
                             //currMsgLen = 包体的长度
-                            int currMsgLen = mReceiveMS.ReadUShort();
+                            int currMsgLen = _receiveMS.ReadUShort();
 
                             //currFullMsgLen 总包的长度=包头长度+包体长度
                             int currFullMsgLen = 2 + currMsgLen;
 
                             //如果数据流的长度>=整包的长度 说明至少收到了一个完整包
-                            if (mReceiveMS.Length >= currFullMsgLen) {
+                            if (_receiveMS.Length >= currFullMsgLen) {
                                 //至少收到一个完整包
                                 //定义包体的byte[]数组
                                 byte[] buffer = new byte[currMsgLen];
 
                                 //把数据流指针放到2的位置 也就是包体的位置
-                                mReceiveMS.Position = 2;
+                                _receiveMS.Position = 2;
 
                                 //把包体读到byte[]数组
-                                mReceiveMS.Read(buffer, 0, currMsgLen);
+                                _receiveMS.Read(buffer, 0, currMsgLen);
 
-                                lock (mReceiveQueue) {
-                                    mReceiveQueue.Enqueue(buffer);
+                                lock (_receiveQueue) {
+                                    _receiveQueue.Enqueue(buffer);
                                 }
                                 //==============处理剩余字节数组===================
 
                                 //剩余字节长度
-                                int remainLen = (int)mReceiveMS.Length - currFullMsgLen;
+                                int remainLen = (int)_receiveMS.Length - currFullMsgLen;
                                 if (remainLen > 0) {
                                     //把指针放在第一个包的尾部
-                                    mReceiveMS.Position = currFullMsgLen;
+                                    _receiveMS.Position = currFullMsgLen;
 
                                     //定义剩余字节数组
                                     byte[] remainBuffer = new byte[remainLen];
 
                                     //把数据流读到剩余字节数组
-                                    mReceiveMS.Read(remainBuffer, 0, remainLen);
+                                    _receiveMS.Read(remainBuffer, 0, remainLen);
 
                                     //清空数据流
-                                    mReceiveMS.Position = 0;
-                                    mReceiveMS.SetLength(0);
+                                    _receiveMS.Position = 0;
+                                    _receiveMS.SetLength(0);
 
                                     //把剩余字节数组重新写入数据流
-                                    mReceiveMS.Write(remainBuffer, 0, remainBuffer.Length);
+                                    _receiveMS.Write(remainBuffer, 0, remainBuffer.Length);
 
                                     remainBuffer = null;
                                 } else {
                                     //没有剩余字节
 
                                     //清空数据流
-                                    mReceiveMS.Position = 0;
-                                    mReceiveMS.SetLength(0);
+                                    _receiveMS.Position = 0;
+                                    _receiveMS.SetLength(0);
 
                                     break;
                                 }
@@ -363,11 +363,11 @@ namespace SpriteFramework
                     ReceiveMsg();
                 } else {
                     //客户端断开连接
-                    Debug.Log(string.Format("服务器{0}断开连接", mClient.RemoteEndPoint.ToString()));
+                    Debug.Log(string.Format("服务器{0}断开连接", _client.RemoteEndPoint.ToString()));
                 }
             } catch {
                 //客户端断开连接
-                Debug.Log(string.Format("服务器{0}断开连接", mClient.RemoteEndPoint.ToString()));
+                Debug.Log(string.Format("服务器{0}断开连接", _client.RemoteEndPoint.ToString()));
             }
         }
         #endregion

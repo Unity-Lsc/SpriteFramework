@@ -19,50 +19,50 @@ namespace SpriteFramework
         /// <summary>
         /// 场景是否加载中
         /// </summary>
-        private bool m_CurrSceneIsLoading;
+        private bool _isCurSceneLoading;
 
         /// <summary>
         /// 目标加载进度
         /// </summary>
-        private float m_TargetProgress = 0f;
+        private float _targetProgress = 0f;
 
         /// <summary>
         /// 当前显示的进度
         /// </summary>
-        private float m_CurProgress = 0f;
+        private float _curProgress = 0f;
 
         /// <summary>
         /// 进度条更新速度
         /// </summary>
-        private float m_ProgressSpeed = 0.5f; // 可以根据需要调整
+        private float _progressSpeed = 0.5f; // 可以根据需要调整
 
         /// <summary>
         /// 当前场景的名字
         /// </summary>
-        private string m_SceneName;
+        private string _sceneName;
 
         /// <summary>
         /// 场景加载结束的回调
         /// </summary>
-        private Action m_OnComplete;
+        private Action _onComplete;
 
 
         public void LoadSceneAsync(string sceneName, Action onComplete = null, LoadSceneMode loadMode = LoadSceneMode.Single) {
-            if (m_CurrSceneIsLoading) {
+            if (_isCurSceneLoading) {
                 GameEntry.LogError("场景:{0}正在加载中", sceneName);
                 return;
             }
 
-            m_OnComplete = onComplete;
-            if (m_SceneName == sceneName) {
+            _onComplete = onComplete;
+            if (_sceneName == sceneName) {
                 GameEntry.LogError("重复加载场景:{0}", sceneName);
-                m_OnComplete?.Invoke();
+                _onComplete?.Invoke();
                 return;
             }
 
-            m_CurProgress = 0;
-            m_CurrSceneIsLoading = true;
-            m_SceneName = sceneName;
+            _curProgress = 0;
+            _isCurSceneLoading = true;
+            _sceneName = sceneName;
 
             //显示Loading界面
             GameEntry.UI.OpenUIForm<UILoadingForm>();
@@ -73,27 +73,27 @@ namespace SpriteFramework
         private IEnumerator TrackProgress(SceneOperationHandle handler) {
             //加载中 显示进度
             while (!handler.IsDone) {
-                m_TargetProgress = handler.Progress;
+                _targetProgress = handler.Progress;
                 yield return null;
             }
 
-            m_TargetProgress = 1.0f;
+            _targetProgress = 1.0f;
         }
 
         internal void OnUpdate() {
-            if (!m_CurrSceneIsLoading) return;
-            if(m_CurProgress < m_TargetProgress) {
-                m_CurProgress += Time.deltaTime * (m_TargetProgress < 1 ? m_ProgressSpeed : m_ProgressSpeed * 2);
+            if (!_isCurSceneLoading) return;
+            if(_curProgress < _targetProgress) {
+                _curProgress += Time.deltaTime * (_targetProgress < 1 ? _progressSpeed : _progressSpeed * 2);
 
                 //防止进度超过100%，显示出现例如102%这种情况
-                m_CurProgress = Mathf.Min(m_CurProgress, m_TargetProgress);
-                OnLoadingUpdateCallback?.Invoke(m_CurProgress);
+                _curProgress = Mathf.Min(_curProgress, _targetProgress);
+                OnLoadingUpdateCallback?.Invoke(_curProgress);
             }
-            if(m_CurProgress == 1 && Mathf.Abs(m_CurProgress - m_TargetProgress) < 0.001f) {
-                GameEntry.Log("场景:{0} 加载完毕!", m_SceneName);
-                OnLoadingUpdateCallback?.Invoke(m_CurProgress);
-                m_CurrSceneIsLoading = false;
-                m_OnComplete?.Invoke();
+            if(_curProgress == 1 && Mathf.Abs(_curProgress - _targetProgress) < 0.001f) {
+                GameEntry.Log("场景:{0} 加载完毕!", _sceneName);
+                OnLoadingUpdateCallback?.Invoke(_curProgress);
+                _isCurSceneLoading = false;
+                _onComplete?.Invoke();
             }
         }
 
