@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using SpriteFramework;
+
+public class TestDataTable : MonoBehaviour
+{
+#if UNITY_EDITOR
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            //根据ID获取某一行配置数据
+            Sys_UIFormEntity entity = GameEntry.DataTable.Get<Sys_UIFormDBModel>().GetEntityById(1);
+            GameEntry.Log(ELogCategory.Normal, entity.ToJson());
+        }
+
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            //获取所有配置数据
+            List<Sys_UIFormEntity> lst = GameEntry.DataTable.Get<Sys_UIFormDBModel>().GetEntities();
+            GameEntry.Log(ELogCategory.Normal, lst.ToJson());
+        }
+
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            //根据名字获取配置数据
+            Sys_UIFormEntity entity = GameEntry.DataTable.Get<Sys_UIFormDBModel>().GetEntityByName("FormDialog"); ;
+            GameEntry.Log(ELogCategory.Normal, entity.ToJson());
+        }
+    }
+#endif
+}

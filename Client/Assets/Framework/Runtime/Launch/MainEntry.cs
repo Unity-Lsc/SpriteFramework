@@ -1,0 +1,67 @@
+using Cysharp.Threading.Tasks;
+using System;
+using UnityEngine;
+using YooAsset;
+
+namespace SpriteMain
+{
+    public class MainEntry : MonoBehaviour
+    {
+        [SerializeField] EPlayMode ePlayMode;
+
+        //预加载相关事件
+        public Action ActionPreloadBegin;
+        public Action<float, string> ActionPreloadUpdate;
+        public Action ActionPreloadComplete;
+
+        public static MainEntry Instance { get; private set; }
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        private async void Start()
+        {
+            //开始检查更新
+            CheckVersionCtrl.Instance.CheckVersionChange(ePlayMode, async () =>
+            {
+                //检查更新完成, 加载Hotfix代码(HybridCLR)
+                await HotfixCtrl.Instance.LoadHotifx();
+
+                //启动YouYouFramework框架入口
+                var operation = CheckVersionCtrl.Instance.DefaultPackage.LoadAssetAsync("Assets/Game/Download/Prefab/GameEntry.prefab");
+                await operation.Task;
+                GameObject gameEntryAsset = operation.AssetObject as GameObject;
+                Instantiate(gameEntryAsset);
+            });
+
+        }
+
+        internal static void Log(object message)
+        {
+#if DEBUG_LOG_NORMAL
+            //由于性能原因，如果在Build Settings中没有勾上“Development Build”
+            //即使开启了DEBUG_LOG_NORMAL也依然不打印普通日志， 只打印警告日志和错误日志
+            if (!Debug.isDebugBuild)
+            {
+                return;
+            }
+            Debug.Log($"MainEntryLog==>{message}");
+#endif
+        }
+        internal static void LogWarning(object message)
+        {
+#if DEBUG_LOG_WARNING
+            Debug.LogWarning($"MainEntryLog==>{message}");
+#endif
+        }
+        internal static void LogError(object message)
+        {
+#if DEBUG_LOG_ERROR
+            Debug.LogError($"MainEntryLog==>{message}");
+#endif
+        }
+
+    }
+}

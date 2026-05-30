@@ -1,0 +1,30 @@
+using UnityEngine;
+using SpriteFramework;
+
+
+/// <summary>
+/// 对于全面屏的挖空适配
+/// </summary>
+public class UIFormAdaptive : MonoBehaviour
+{
+    private float Offset = 30;
+    private RectTransform rectTransform;
+
+    private void OnDestroy()
+    {
+        //GameEntry.Model.GetModel<QualityModel>().ScreenChange -= OnCurrScreen;
+    }
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+
+        Offset = -Offset * 2;
+        //GameEntry.Model.GetModel<QualityModel>().ScreenChange += OnCurrScreen;
+        OnCurrScreen();
+    }
+
+    private void OnCurrScreen()
+    {
+        rectTransform.sizeDelta = new Vector2(GameEntry.UI.CurrScreen > GameEntry.UI.StandardScreen ? Offset : 0, 0);
+    }
+}
