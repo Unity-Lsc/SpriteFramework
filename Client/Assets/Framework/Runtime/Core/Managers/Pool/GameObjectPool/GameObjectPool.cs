@@ -28,6 +28,7 @@ namespace SpriteFramework
         /// Key==Prefab的InstanceId
         /// </summary>
         private Dictionary<int, AssetHandle> prefabAssetDic = new();
+        private readonly List<MonoBehaviour> m_TempMonoBehaviours = new();
 
         public GameObject GameObjectPoolRoot { get; private set; }
 
@@ -154,6 +155,7 @@ namespace SpriteFramework
 
             //拿到一个实例
             GameObject inst = prefabPool.SpawnInstance();
+            NotifySpawnedFromPool(inst);
             return inst;
         }
         public async UniTask<GameObject> Spawn(string prefabFullPath, SpawnPoolId poolId = SpawnPoolId.Common)
@@ -187,10 +189,42 @@ namespace SpriteFramework
             {
                 if (prefabPool.Root == null) return;
 
+                NotifyDespawnedFromPool(inst);
+
                 inst.transform.SetParent(prefabPool.Root.transform, false);
                 inst.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
                 prefabPool.DespawnInstance(inst);
             }
+        }
+
+        private void NotifySpawnedFromPool(GameObject inst)
+        {
+            if (inst == null) return;
+
+            inst.GetComponents(m_TempMonoBehaviours);
+            for (int i = 0; i < m_TempMonoBehaviours.Count; i++)
+            {
+                if (m_TempMonoBehaviours[i] is IGameObjectPoolLifecycle lifecycle)
+                {
+                    lifecycle.OnSpawnedFromPool();
+                }
+            }
+            m_TempMonoBehaviours.Clear();
+        }
+
+        private void NotifyDespawnedFromPool(GameObject inst)
+        {
+            if (inst == null) return;
+
+            inst.GetComponents(m_TempMonoBehaviours);
+            for (int i = 0; i < m_TempMonoBehaviours.Count; i++)
+            {
+                if (m_TempMonoBehaviours[i] is IGameObjectPoolLifecycle lifecycle)
+                {
+                    lifecycle.OnDespawnedFromPool();
+                }
+            }
+            m_TempMonoBehaviours.Clear();
         }
 
         /// <summary>

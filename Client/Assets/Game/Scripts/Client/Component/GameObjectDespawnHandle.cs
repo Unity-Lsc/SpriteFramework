@@ -7,12 +7,13 @@ using SpriteFramework;
 /// <summary>
 /// GameObject池, 对象定时自动回池
 /// </summary>
-public class GameObjectDespawnHandle : MonoBehaviour
+public class GameObjectDespawnHandle : MonoBehaviour, IGameObjectPoolLifecycle
 {
     private Coroutine coroutine;
     private float DelayTimeDespawn;
+    private bool isNotifyingDespawn;
 
-    public Action OnDespawn;
+    public event Action OnDespawn;
 
     public void SetDelayTimeDespawn(float delayTime)
     {
@@ -24,7 +25,7 @@ public class GameObjectDespawnHandle : MonoBehaviour
         }
         if (DelayTimeDespawn == 0)
         {
-            GameEntry.Pool.GameObjectPool.Despawn(gameObject);
+            Despawn();
             return;
         }
 
@@ -41,11 +42,41 @@ public class GameObjectDespawnHandle : MonoBehaviour
         }
     }
 
+    public void Despawn()
+    {
+        StopTime();
+        GameEntry.Pool.GameObjectPool.Despawn(gameObject);
+    }
+
+    void IGameObjectPoolLifecycle.OnSpawnedFromPool()
+    {
+        StopTime();
+    }
+
+    void IGameObjectPoolLifecycle.OnDespawnedFromPool()
+    {
+        if (isNotifyingDespawn) return;
+
+        isNotifyingDespawn = true;
+        StopTime();
+
+        Action onDespawn = OnDespawn;
+        OnDespawn = null;
+
+        try
+        {
+            onDespawn?.Invoke();
+        }
+        finally
+        {
+            isNotifyingDespawn = false;
+        }
+    }
+
     IEnumerator DelayDespawn()
     {
         yield return new WaitForSeconds(DelayTimeDespawn);
-        OnDespawn?.Invoke();
-        GameEntry.Pool.GameObjectPool.Despawn(gameObject);
+        Despawn();
     }
 
 }

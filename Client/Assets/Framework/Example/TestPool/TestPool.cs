@@ -18,7 +18,7 @@ public class TestPool : MonoBehaviour
             //3秒后自动回池
             GameObjectDespawnHandle autoDespawnHandle = obj.gameObject.GetOrAddComponent<GameObjectDespawnHandle>();
             autoDespawnHandle.SetDelayTimeDespawn(3);
-            autoDespawnHandle.OnDespawn = () =>
+            autoDespawnHandle.OnDespawn += () =>
             {
                 objList.Remove(obj);
             };
